@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusNexus ERP | Elite Executive Prototype</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0A192F;
+            --navy-light: #112240;
+            --navy-dark: #020c1b;
+            --gold: #64ffda;
+            --gold-bright: #00fa9a;
+            --slate: #8892b0;
+            --white: #E6F1FF;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--navy-dark);
+            color: var(--white);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* --- Animated Particles Background --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* --- Login Portal UI --- */
+        #login-screen {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, var(--navy-light), var(--navy-dark));
+            transition: var(--transition);
+        }
+
+        .login-card {
+            width: 450px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transform: translateY(0);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .logo-main {
+            font-family: 'Playfair Display';
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .logo-main span {
+            color: #64ffda;
+        }
+
+        .tagline {
+            font-size: 0.75rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+            display: block;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .role-chip {
+            padding: 8px 15px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            font-size: 0.65rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--slate);
+            background: transparent;
+        }
+
+        .role-chip.active {
+            background: var(--gold);
+            color: var(--navy-dark);
+            border-color: var(--gold);
+            box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Inter';
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            border-color: var(--gold);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+            color: var(--navy-dark);
+            border: none;
+            padding: 18px;
+            border-radius: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(197, 160, 89, 0.4);
+        }
+
+        /* --- Interactive Prototype Shell --- */
+        #prototype-shell {
+            display: none;
+            height: 100vh;
+            grid-template-columns: 280px 1fr;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            background: var(--navy-dark);
+            border-right: 1px solid var(--glass-border);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            color: var(--slate);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: var(--glass);
+            color: var(--gold);
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* --- Header --- */
+        .header {
+            height: 80px;
+            border-bottom: 1px solid var(--glass-border);
+            display: grid;
+            grid-template-columns: 1fr 2fr 1.5fr;
+            align-items: center;
+            padding: 0 40px;
+            background: rgba(10, 25, 47, 0.8);
+            backdrop-filter: blur(10px);
+            gap: 40px;
+        }
+
+        .search-portal {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 8px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            max-width: 450px;
+            height: 40px;
+        }
+
+        .search-portal:focus-within {
+            border-color: var(--gold);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.2);
+        }
+
+        .search-portal input {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 0.75rem;
+            width: 100%;
+            outline: none;
+        }
+
+        .inner-tabs {
+            display: flex;
+            gap: 30px;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .inner-tab {
+            padding: 15px 0;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--slate);
+            border-bottom: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .inner-tab:hover,
+        .inner-tab.active {
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .college-selector {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 8px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            min-width: 220px;
+        }
+
+        .college-selector:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--gold);
+        }
+
+        .college-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            width: 100%;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            overflow: hidden;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .college-option {
+            padding: 12px 20px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--slate);
+            transition: var(--transition);
+        }
+
+        .college-option:hover {
+            background: rgba(100, 255, 218, 0.1);
+            color: var(--gold);
+        }
+
+        .college-selector.active .college-dropdown {
+            display: block;
+        }
+
+        .campus-switcher {
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px;
+            border-radius: 50px;
+        }
+
+        .campus-node {
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .campus-node.active {
+            background: var(--gold);
+            color: var(--navy-dark);
+        }
+
+        /* --- Main Content --- */
+        .main-view {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 40px;
+            background: radial-gradient(circle at top right, #112240, #020c1b);
+        }
+
+        .page-title {
+            font-family: 'Playfair Display';
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .breadcrumb {
+            font-size: 0.7rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            display: block;
+        }
+
+        /* --- Dashboard Components --- */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            border-radius: 15px;
+            transition: var(--transition);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+
+        .kpi-val {
+            font-size: 1.8rem;
+            font-weight: 900;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .kpi-label {
+            font-size: 0.65rem;
+            color: var(--slate);
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        /* --- Workflow List --- */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--glass);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .data-table th {
+            text-align: left;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold);
+        }
+
+        .data-table td {
+            padding: 20px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .status-pill {
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 800;
+        }
+
+        .status-verified {
+            background: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+        }
+
+        .status-pending {
+            background: rgba(197, 160, 89, 0.1);
+            color: var(--gold);
+        }
+
+        /* Animation */
+        .slide-up {
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen">
+        <div class="login-card slide-up">
+            <h1 class="logo-main">Campus<span>Nexus</span></h1>
+            <span class="tagline">Sovereign ERP Intelligence</span>
+
+
+            <div class="input-group">
+                <label>Institutional E-mail</label>
+                <input type="email" id="email" value="admin@campusnexus.demo">
+            </div>
+            <div class="input-group">
+                <label>Secure Key</label>
+                <input type="password" id="password" value="••••••••">
+            </div>
+
+            <button class="login-btn" id="loginTrigger">Initiate Secure Login</button>
+        </div>
+    </div>
+
+    <!-- PROTOTYPE SHELL -->
+    <div id="prototype-shell">
+        <aside class="sidebar">
+            <h2 class="logo-main" style="font-size: 1.5rem; margin-bottom: 40px;">C<span>N</span></h2>
+
+            <nav>
+                <a href="#" class="nav-item active" onclick="renderView('Dashboard')"><i>⊞</i> Dashboard</a>
+                <a href="#" class="nav-item" onclick="renderView('Admissions')"><i>🎯</i> Admissions</a>
+                <a href="#" class="nav-item" onclick="renderView('SIS (Students)')"><i>🎓</i> SIS (Students)</a>
+                <a href="#" class="nav-item" onclick="renderView('Academics')"><i>📚</i> Academics</a>
+                <a href="#" class="nav-item" onclick="renderView('Exams')"><i>📝</i> Exams</a>
+                <a href="#" class="nav-item" onclick="renderView('Finance')"><i>💰</i> Finance</a>
+                <a href="#" class="nav-item" onclick="renderView('HRMS')"><i>👥</i> HRMS</a>
+                <a href="#" class="nav-item" onclick="renderView('Analytics')"><i>📈</i> Analytics</a>
+            </nav>
+
+            <div style="margin-top: auto;">
+                <a href="#" class="nav-item" style="color: var(--gold);"><i>🛡️</i> System Audit</a>
+                <a href="#" class="nav-item" id="logoutBtn"><i>⎋</i> Termination</a>
+            </div>
+        </aside>
+
+        <main style="display: flex; flex-direction: column; overflow: hidden; height: 100vh;">
+            <header class="header">
+                <div class="college-selector" onclick="this.classList.toggle('active')">
+                    <i style="color: var(--gold); font-size: 0.8rem;">🏛️</i>
+                    <span id="activeCollege" style="font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;">INSTITUT
+                        IONAL_CORE: MAIN</span>
+                    <i style="font-size: 0.5rem; margin-left: auto;">▼</i>
+                    <div class="college-dropdown">
+                        <div class="college-option" onclick="selectCollege('St. Xavier\'s College of Tech')">St.
+                            Xavier's College of Tech</div>
+                        <div class="college-option" onclick="selectCollege('Regent International Node')">Regent
+                            International Node</div>
+                        <div class="college-option" onclick="selectCollege('Sovereign Academy of Arts')">Sovereign
+                            Academy of Arts</div>
+                        <div class="college-option" onclick="selectCollege('Imperial Science Hub')">Imperial Science Hub
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-portal">
+                    <i style="font-size: 0.8rem; color: var(--gold);">🔍</i>
+                    <input type="text" placeholder="Search Student ID, Receipt #, or Staff Node..." id="globalSearch">
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 20px; justify-content: flex-end;">
+                    <span style="font-size: 0.7rem; font-weight: 800; color: var(--gold);">SECURE_NODE: S2-B</span>
+                    <div class="user-chip"
+                        style="width: 35px; height: 35px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--navy-dark); font-weight: 900; font-size: 0.8rem;">
+                        AD</div>
+                </div>
+            </header>
+
+            <div class="main-view" id="content-view">
+                <span class="breadcrumb">GLOBAL GOVERNANCE / ANALYTICS HUB</span>
+                <h1 class="page-title">Executive Dashboard</h1>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <span class="kpi-val">10,245</span>
+                        <span class="kpi-label">Active Census</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-val">3,200</span>
+                        <span class="kpi-label">Leads Injected</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-val" style="color: #10B981;">$4.2M</span>
+                        <span class="kpi-label">Revenue Sync</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-val" style="color: var(--gold);">92.4%</span>
+                        <span class="kpi-label">Node Integrity</span>
+                    </div>
+                </div>
+
+                <div class="slide-up">
+                    <h3
+                        style="font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px;">
+                        Recent Enrollment Triggers</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Applicant ID</th>
+                                <th>Name</th>
+                                <th>Program</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#CN-9822</td>
+                                <td>Aarav Malhotra</td>
+                                <td>B.Tech Computer Science</td>
+                                <td><span class="status-pill status-verified">VERIFIED</span></td>
+                                <td style="color: var(--gold); font-weight: 800; cursor: pointer;">MANAGE</td>
+                            </tr>
+                            <tr>
+                                <td>#CN-9821</td>
+                                <td>Isha Kapur</td>
+                                <td>MBA Finance</td>
+                                <td><span class="status-pill status-pending">PENDING_DOCS</span></td>
+                                <td style="color: var(--gold); font-weight: 800; cursor: pointer;">RESOLVE</td>
+                            </tr>
+                            <tr>
+                                <td>#CN-9820</td>
+                                <td>Zaid Ahmed</td>
+                                <td>M.Tech Robotics</td>
+                                <td><span class="status-pill status-verified">VERIFIED</span></td>
+                                <td style="color: var(--gold); font-weight: 800; cursor: pointer;">MANAGE</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- Particle Background ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 1,
+                    speed: Math.random() * 0.5 + 0.2
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#64ffda';
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                p.y -= p.speed;
+                if (p.y < -10) p.y = canvas.height + 10;
+            });
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        draw();
+
+        // Session Restoration Logic
+        window.addEventListener('load', () => {
+            const savedCollege = localStorage.getItem('activeCollege');
+
+            if (savedCollege) {
+                document.getElementById('activeCollege').innerText = `INSTITUTIONAL_CORE: ${savedCollege.split(' ')[0].toUpperCase()}`;
+            } else {
+                document.getElementById('activeCollege').innerText = `SELECT INSTITUTIONAL NODE`;
+            }
+
+            // Note: Login persistence disabled to ensure "Login First" experience as requested
+        });
+
+        // --- View Controller Logic ---
+        const loginScreen = document.getElementById('login-screen');
+        const prototypeShell = document.getElementById('prototype-shell');
+        const contentView = document.getElementById('content-view');
+        const loginBtn = document.getElementById('loginTrigger');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const campusNodes = document.querySelectorAll('.campus-node');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        let currentCampus = "Main Campus";
+        let currentView = "Dashboard";
+
+        const mockData = {
+            "Admin": {
+                title: "Executive Dashboard",
+                breadcrumb: "GLOBAL GOVERNANCE / ANALYTICS HUB",
+                kpis: [
+                    { val: "10,245", label: "Active Census", color: "var(--white)" },
+                    { val: "3,200", label: "Leads Injected", color: "var(--white)" },
+                    { val: "$4.1M", label: "Revenue Sync", color: "var(--gold)" },
+                    { val: "92.4%", label: "Node Integrity", color: "#64ffda" },
+                    { val: "1,450", label: "Faculty Nodes", color: "var(--white)" },
+                    { val: "99.9%", label: "System Uptime", color: "#64ffda" }
+                ]
+            }
+        };
+
+        const viewTemplates = {
+            "Dashboard": () => {
+                const data = mockData["Admin"];
+                return `
+                    <span class="breadcrumb">${data.breadcrumb}</span>
+                    <h1 class="page-title">${data.title}</h1>
+                    
+                    <div class="kpi-grid" style="grid-template-columns: repeat(6, 1fr); margin-bottom: 30px;">
+                        ${data.kpis.map(k => `
+                            <div class="kpi-card" style="padding: 15px;">
+                                <span class="kpi-val" style="color: ${k.color}; font-size: 1.1rem;">${k.val}</span>
+                                <span class="kpi-label" style="font-size: 0.55rem;">${k.label}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; margin-bottom: 30px;" class="slide-up">
+                        <div style="background: var(--glass); padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                                <h4 style="font-size: 0.7rem; color: var(--gold); letter-spacing: 2px;">ENROLLMENT_VELOCITY_MATRIX</h4>
+                                <div style="display: flex; gap: 10px;">
+                                    <span style="font-size: 0.6rem; color: var(--slate);"><i style="color: var(--gold);">●</i> Applicants</span>
+                                    <span style="font-size: 0.6rem; color: var(--slate);"><i style="color: #64ffda;">●</i> Admits</span>
+                                </div>
+                            </div>
+                            <div style="height: 200px; width: 100%; position: relative; margin-top: 20px;">
+                                <svg viewBox="0 0 500 200" style="width: 100%; height: 100%; overflow: visible;">
+                                    <defs>
+                                        <linearGradient id="waveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" style="stop-color:var(--gold); stop-opacity:0.3" />
+                                            <stop offset="100%" style="stop-color:var(--gold); stop-opacity:0" />
+                                        </linearGradient>
+                                        <linearGradient id="waveStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" style="stop-color:var(--gold); stop-opacity:0.5" />
+                                            <stop offset="50%" style="stop-color:var(--gold); stop-opacity:1" />
+                                            <stop offset="100%" style="stop-color:var(--gold); stop-opacity:0.5" />
+                                        </linearGradient>
+                                    </defs>
+                                    
+                                    <!-- Grid lines for scale -->
+                                    <line x1="0" y1="50" x2="500" y2="50" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+                                    <line x1="0" y1="100" x2="500" y2="100" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+                                    <line x1="0" y1="150" x2="500" y2="150" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+
+                                    <!-- The Wave Path -->
+                                    <path d="M 0 160 C 50 160, 100 140, 150 120 C 200 100, 250 40, 300 60 C 350 80, 400 30, 450 40 L 500 40 L 500 200 L 0 200 Z" fill="url(#waveGradient)" />
+                                    <path d="M 0 160 C 50 160, 100 140, 150 120 C 200 100, 250 40, 300 60 C 350 80, 400 30, 450 40" fill="none" stroke="url(#waveStroke)" stroke-width="3" stroke-linecap="round">
+                                        <animate attributeName="stroke-dasharray" from="0,1000" to="1000,0" dur="2s" fill="freeze" />
+                                    </path>
+
+                                    <!-- Interactive Data Points -->
+                                    <circle cx="50" cy="160" r="4" fill="var(--gold)" />
+                                    <circle cx="150" cy="120" r="4" fill="var(--gold)" />
+                                    <circle cx="300" cy="60" r="4" fill="var(--gold)" />
+                                    <circle cx="450" cy="40" r="6" fill="#64ffda">
+                                        <animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite" />
+                                    </circle>
+                                </svg>
+                                <div style="display: flex; justify-content: space-between; margin-top: 15px; padding: 0 10px;">
+                                    <span style="font-size: 0.6rem; color: var(--slate);">OCT</span>
+                                    <span style="font-size: 0.6rem; color: var(--slate);">NOV</span>
+                                    <span style="font-size: 0.6rem; color: var(--slate);">DEC</span>
+                                    <span style="font-size: 0.6rem; color: var(--slate);">JAN</span>
+                                    <span style="font-size: 0.6rem; color: var(--gold); font-weight: 800;">LIVE_FEB</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--glass); padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border);">
+                            <h4 style="font-size: 0.7rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 25px;">GOVERNANCE_QUICK_NODES</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <button class="login-btn" style="margin:0; padding: 15px; font-size: 0.6rem; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--white); display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                                    <i style="font-size: 1.2rem; color: var(--gold);">📄</i>
+                                    REPORT_SYNC
+                                </button>
+                                <button class="login-btn" style="margin:0; padding: 15px; font-size: 0.6rem; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--white); display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                                    <i style="font-size: 1.2rem; color: #64ffda;">⚡</i>
+                                    BULK_SMS
+                                </button>
+                                <button class="login-btn" style="margin:0; padding: 15px; font-size: 0.6rem; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--white); display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                                    <i style="font-size: 1.2rem; color: #64ffda;">💳</i>
+                                    PAY_RECON
+                                </button>
+                                <button class="login-btn" style="margin:0; padding: 15px; font-size: 0.6rem; background: rgba(255,255,255,0.03); border: 1px solid var(--gold); color: var(--gold); display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                                    <i style="font-size: 1.2rem; color: var(--gold);">🛡️</i>
+                                    SYSTEM_AUDIT
+                                </button>
+                            </div>
+                            <div style="margin-top: 25px; background: rgba(100, 255, 218, 0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(100, 255, 218, 0.1);">
+                                <span style="font-size: 0.6rem; color: #64ffda; display: block; margin-bottom: 5px;">NETWORK_LATENCY_STATUS</span>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
+                                        <div style="width: 85%; height: 100%; background: #64ffda;"></div>
+                                    </div>
+                                    <span style="font-size: 0.7rem; font-weight: 800;">12ms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="slide-up">
+                        <h3 style="font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 20px;">Institutional Real-Time Feed</h3>
+                        <div style="background: var(--glass); border-radius: 15px; border: 1px solid var(--glass-border); padding: 5px 25px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 8px; height: 8px; background: #64ffda; border-radius: 50%; box-shadow: 0 0 10px #64ffda;"></div>
+                                    <span style="font-size: 0.8rem;">Batch Enrollment: Engineering 2026</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 20px;">
+                                    <span style="font-size: 0.65rem; color: var(--slate);">2 Min Ago</span>
+                                    <span class="status-pill status-verified">RECONCILED</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 8px; height: 8px; background: var(--gold); border-radius: 50%;"></div>
+                                    <span style="font-size: 0.8rem;">Fee Collection: City Node Node-02</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 20px;">
+                                    <span style="font-size: 0.65rem; color: var(--slate);">15 Min Ago</span>
+                                    <span class="status-pill status-pending" style="background: rgba(197, 160, 89, 0.1); color: var(--gold);">IN_TRANSIT</span>
+                                </div>
+                            </div>
+                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 8px; height: 8px; background: #64ffda; border-radius: 50%;"></div>
+                                    <span style="font-size: 0.8rem;">Institutional Payroll: Cycle_FEB_26</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 20px;">
+                                    <span style="font-size: 0.65rem; color: var(--slate);">1 Hour Ago</span>
+                                    <span class="status-pill status-verified">DISBURSED</span>
+                                </div>
+                            </div>
+                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 8px; height: 8px; background: #ff4d4d; border-radius: 50%; box-shadow: 0 0 10px #ff4d4d;"></div>
+                                    <span style="font-size: 0.8rem;">Critical Alert: Server Node-04 High Load</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 20px;">
+                                    <span style="font-size: 0.65rem; color: var(--slate);">3 Hours Ago</span>
+                                    <span class="status-pill" style="background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.2);">RESOLVED</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            "Admissions": () => `
+                <span class="breadcrumb">LIFECYCLE / ENROLLMENT FUNNEL</span>
+                <h1 class="page-title">Admissions Command</h1>
+                <div class="kpi-grid">
+                    <div class="kpi-card"><span class="kpi-val">1,240</span><span class="kpi-label">Total Leads</span></div>
+                    <div class="kpi-card"><span class="kpi-val" style="color: var(--gold);">450</span><span class="kpi-label">Ready for Verification</span></div>
+                    <div class="kpi-card"><span class="kpi-val" style="color: #64ffda;">185</span><span class="kpi-label">Converted Today</span></div>
+                    <div class="kpi-card"><span class="kpi-val">14.2%</span><span class="kpi-label">Funnel Velocity</span></div>
+                </div>
+                <div class="slide-up">
+                    <table class="data-table">
+                        <thead><tr><th>Lead ID</th><th>Name</th><th>Program</th><th>Verification</th><th>Action</th></tr></thead>
+                        <tbody>
+                            <tr><td>#L-9844</td><td>Sarah Jenkins</td><td>MBA Finance</td><td><span class="status-pill status-pending" style="color: #64ffda;">PENDING</span></td><td><button class="login-btn" style="padding: 5px 15px; font-size: 0.6rem; margin:0;">VERIFY</button></td></tr>
+                            <tr><td>#L-9843</td><td>Michael Chen</td><td>B.Tech CS</td><td><span class="status-pill status-verified">DONE</span></td><td><button class="login-btn" style="padding: 5px 15px; background: #64ffda; color: var(--navy-dark); font-size: 0.6rem; margin:0;">CONVERT</button></td></tr>
+                            <tr><td>#L-9842</td><td>Priya Sharma</td><td>B.Arch</td><td><span class="status-pill status-pending">DOC_REV</span></td><td><button class="login-btn" style="padding: 5px 15px; font-size: 0.6rem; margin:0;">RESOLVE</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            "SIS (Students)": () => {
+                return `
+                <span class="breadcrumb">SOVEREIGN CORE / SCHOLAR REGISTRY</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h1 class="page-title">Student 360 Hub</h1>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="login-btn" style="width: auto; padding: 12px 25px; font-size: 0.7rem; background: var(--glass); border: 1px solid var(--gold); color: var(--gold);" onclick="renderView('SIS (Students)')">DIRECTORY</button>
+                        <button class="login-btn" style="width: auto; padding: 12px 25px; font-size: 0.7rem;" onclick="simulateProfileView()">VIEW SELECTED PROFILE</button>
+                    </div>
+                </div>
+
+                <div id="sis-container">
+                    <div class="kpi-grid">
+                        <div class="kpi-card"><span class="kpi-val">10,245</span><span class="kpi-label">Active Scholars</span></div>
+                        <div class="kpi-card"><span class="kpi-val" style="color: var(--gold);">94.2%</span><span class="kpi-label">Avg Attendance</span></div>
+                        <div class="kpi-card"><span class="kpi-val">$1.2M</span><span class="kpi-label">Fees Collected</span></div>
+                        <div class="kpi-card"><span class="kpi-val">LIVE</span><span class="kpi-label">Sync Status</span></div>
+                    </div>
+
+                    <div class="slide-up">
+                        <div style="background: var(--glass); padding: 25px; border-radius: 15px; border: 1px solid var(--glass-border); margin-bottom: 20px; display: flex; gap: 20px; align-items: center;">
+                            <input type="text" placeholder="Filter by Program, Batch, or Name..." style="flex: 1; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); padding: 12px; border-radius: 8px; color: var(--white); outline: none;">
+                            <button class="login-btn" style="width: auto; margin:0; padding: 12px 25px; font-size: 0.7rem;">APPLY_FILTERS</button>
+                        </div>
+                        <table class="data-table">
+                            <thead><tr><th>Student ID</th><th>Name</th><th>Program</th><th>Year</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody>
+                                <tr><td>#CN-9822</td><td>Aarav Malhotra</td><td>B.Tech CS</td><td>3rd Year</td><td><span class="status-pill status-verified">ACTIVE</span></td><td><button class="login-btn" style="padding: 5px 12px; font-size: 0.6rem; margin:0;" onclick="simulateProfileView('#CN-9822')">PROFILE</button></td></tr>
+                                <tr><td>#CN-9823</td><td>Isha Kapur</td><td>MBA Finance</td><td>2nd Year</td><td><span class="status-pill status-verified">ACTIVE</span></td><td><button class="login-btn" style="padding: 5px 12px; font-size: 0.6rem; margin:0;" onclick="simulateProfileView('#CN-9823')">PROFILE</button></td></tr>
+                                <tr><td>#CN-9824</td><td>Zaid Ahmed</td><td>B.Arch</td><td>1st Year</td><td><span class="status-pill status-pending">DOC_REV</span></td><td><button class="login-btn" style="padding: 5px 12px; font-size: 0.6rem; margin:0;" onclick="simulateProfileView('#CN-9824')">PROFILE</button></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            },
+            "Finance": () => `
+                <span class="breadcrumb">FISCAL_LEDGER / REVENUE_ENGINE</span>
+                <h1 class="page-title">Financial Governance Hub</h1>
+                <div class="kpi-grid">
+                    <div class="kpi-card"><span class="kpi-val" style="color: #64ffda;">$4.1M</span><span class="kpi-label">Total Collection</span></div>
+                    <div class="kpi-card"><span class="kpi-val" style="color: var(--gold);">$1.2M</span><span class="kpi-label">Accounts Receivable</span></div>
+                    <div class="kpi-card"><span class="kpi-val">$840K</span><span class="kpi-label">Projected Revenue</span></div>
+                    <div class="kpi-card"><span class="kpi-val">100%</span><span class="kpi-label">Ledger Integrity</span></div>
+                </div>
+                
+                <div class="inner-tabs">
+                    <div class="inner-tab active" onclick="renderFinanceSection('Dashboard')">Governance Dashboard</div>
+                    <div class="inner-tab" onclick="renderFinanceSection('FeeStructure')">Fee Structure</div>
+                    <div class="inner-tab" onclick="renderFinanceSection('Collection')">Collection Register</div>
+                    <div class="inner-tab" onclick="renderFinanceSection('Reports')">Financial Reports</div>
+                </div>
+
+                <div id="finance-section-container">
+                    <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px;" class="slide-up">
+                        <div style="background: var(--glass); padding: 25px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                            <h4 style="font-size: 0.7rem; color: var(--gold); margin-bottom: 20px;">COLLECTION_VELOCITY</h4>
+                            <div style="height: 200px; display: flex; align-items: flex-end; gap: 15px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <div style="flex: 1; height: 40%; background: var(--glass); border: 1px solid var(--gold); position:relative;"><span style="position:absolute; top:-20px; width:100%; text-align:center; font-size:0.6rem;">OCT</span></div>
+                                <div style="flex: 1; height: 60%; background: var(--glass); border: 1px solid var(--gold); position:relative;"><span style="position:absolute; top:-20px; width:100%; text-align:center; font-size:0.6rem;">NOV</span></div>
+                                <div style="flex: 1; height: 85%; background: var(--glass); border: 1px solid var(--gold); position:relative;"><span style="position:absolute; top:-20px; width:100%; text-align:center; font-size:0.6rem;">DEC</span></div>
+                                <div style="flex: 1; height: 70%; background: var(--glass); border: 1px solid var(--gold); position:relative;"><span style="position:absolute; top:-20px; width:100%; text-align:center; font-size:0.6rem;">JAN</span></div>
+                                <div style="flex: 1; height: 95%; background: var(--gold); box-shadow: 0 0 20px var(--gold); position:relative;"><span style="position:absolute; top:-20px; width:100%; text-align:center; font-size:0.6rem; color:var(--gold);">FEB</span></div>
+                            </div>
+                            <button class="login-btn" style="margin-top: 30px; font-size: 0.65rem; padding: 12px;" onclick="simulateFeeDemand()">TRIGGER_FEE_DEMAND_GENERATION</button>
+                        </div>
+
+                        <div style="background: var(--glass); padding: 25px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                            <h4 style="font-size: 0.7rem; color: var(--gold); margin-bottom: 20px;">REAL-TIME_RECONCILIATION</h4>
+                            <table class="data-table" style="font-size: 0.7rem;">
+                                <thead><tr><th>Ref ID</th><th>Student Node</th><th>Mode</th><th>Status</th></tr></thead>
+                                <tbody>
+                                    <tr><td>#FT-8812</td><td>Aarav Malhotra</td><td>GATEWAY</td><td><span class="status-pill status-verified">VERIFIED</span></td></tr>
+                                    <tr><td>#FT-8813</td><td>Isha Kapur</td><td>NEFT</td><td><button class="login-btn" style="padding: 5px 10px; font-size:0.55rem; margin:0; width:auto;">RESOLVE</button></td></tr>
+                                    <tr><td>#FT-8814</td><td>Zaid Ahmed</td><td>CASH</td><td><button class="login-btn" style="padding: 5px 10px; font-size:0.55rem; margin:0; width:auto;">RESOLVE</button></td></tr>
+                                    <tr><td>#FT-8815</td><td>Sanya V.</td><td>GATEWAY</td><td><span class="status-pill status-verified">VERIFIED</span></td></tr>
+                                    <tr><td>#FT-8816</td><td>Rohan S.</td><td>CHEQUE</td><td><button class="login-btn" style="padding: 5px 10px; font-size:0.55rem; margin:0; width:auto; background: var(--slate); color: var(--white);">AUDIT_FAIL</button></td></tr>
+                                </tbody>
+                            </table>
+                            <button class="login-btn" style="margin-top: 20px; font-size: 0.65rem; padding: 12px; background: none; border: 1px solid var(--gold); color: var(--gold);">DOWNLOAD_RECON_REPORT</button>
+                        </div>
+                    </div>
+                </div>
+            `,
+            "Analytics": () => `
+                <span class="breadcrumb">INTELLIGENCE / REPORT_CATALOG</span>
+                <h1 class="page-title">Institutional Intelligence Hub</h1>
+                <div class="kpi-grid">
+                    <div class="kpi-card"><span class="kpi-val">42</span><span class="kpi-label">Stored Templates</span></div>
+                    <div class="kpi-card"><span class="kpi-val" style="color: #10B981;">100%</span><span class="kpi-label">Audit Readiness</span></div>
+                    <div class="kpi-card"><span class="kpi-val">1.2s</span><span class="kpi-label">Generation Velocity</span></div>
+                    <div class="kpi-card"><span class="kpi-val" style="color: var(--gold);">SECURE</span><span class="kpi-label">Encryption Node</span></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 320px 1fr; gap: 30px;" class="slide-up">
+                    <div style="background: var(--glass); padding: 25px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                        <h4 style="font-size: 0.7rem; color: var(--gold); margin-bottom: 20px;">REPORT CATEGORIES</h4>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button class="nav-item analytics-category active" data-category="All" style="font-size: 0.75rem;">All Reports (42)</button>
+                            <button class="nav-item analytics-category" data-category="Admin" style="font-size: 0.75rem;">Administrative (12)</button>
+                            <button class="nav-item analytics-category" data-category="Finance" style="font-size: 0.75rem;">Financials & Dues (15)</button>
+                            <button class="nav-item analytics-category" data-category="Academic" style="font-size: 0.75rem;">Academic Performance (08)</button>
+                            <button class="nav-item analytics-category" data-category="HR" style="font-size: 0.75rem;">HR & Payroll (07)</button>
+                        </div>
+                    </div>
+                    
+                    <div style="background: var(--glass); padding: 25px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                          <h4 style="font-size: 0.7rem; color: var(--gold); margin-bottom: 20px;">REPORTS_MASTER_LIST</h4>
+                          <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
+                             <input type="text" placeholder="Search by Report ID or Keyword..." style="flex: 1; background: none; border: 1px solid var(--glass-border); padding: 10px; border-radius: 5px; color: var(--white); font-size: 0.75rem;">
+                             <button class="login-btn" style="width: auto; margin:0; padding: 10px 20px; font-size: 0.65rem;">EXPORT_PDF_BATCH</button>
+                             <button class="login-btn" style="width: auto; margin:0; padding: 10px 20px; font-size: 0.65rem; background: var(--glass); border: 1px solid var(--gold); color: var(--gold);">EXPORT_EXCEL</button>
+                          </div>
+                          <table class="data-table">
+                            <thead><tr><th>Report Code</th><th>Title</th><th>Last Generation</th><th>Action</th></tr></thead>
+                            <tbody id="analytics-report-list">
+                                <tr data-category="Admin"><td>#REP-AD-01</td><td>Daily Enrollment Funnel Digest</td><td>10 Min Ago</td><td><button class="login-btn" style="padding: 5px 15px; font-size: 0.6rem; margin:0; width:auto;">GENERATE</button></td></tr>
+                                <tr data-category="Finance"><td>#REP-FN-04</td><td>Fee Collection vs Projected</td><td>Yesterday</td><td><button class="login-btn" style="padding: 5px 15px; font-size: 0.6rem; margin:0; width:auto;">GENERATE</button></td></tr>
+                                <tr data-category="Academic"><td>#REP-AC-02</td><td>Syllabus Coverage Tracker</td><td>2 Hours Ago</td><td><button class="login-btn" style="padding: 5px 15px; font-size: 0.6rem; margin:0; width:auto;">GENERATE</button></td></tr>
+                                <tr data-category="HR"><td>#REP-HR-05</td><td>Institutional Payroll</td><td>Feb 01, 2026</td><td><button class="login-btn" style="padding: 5px 15px; font-size: 0.6rem; margin:0; width:auto;">GENERATE</button></td></tr>
+                                <tr data-category="Finance"><td>#REP-FN-09</td><td>Outstanding Dues Sync</td><td>Live</td><td><button class="login-btn" style="padding: 5px 15px; font-size: 0.6rem; margin:0; width:auto; background: #10B981;">DOWNLOAD_XLS</button></td></tr>
+                            </tbody>
+                         </table>
+                    </div>
+                </div>
+            `,
+            "Academics": () => `
+                <span class="breadcrumb">INSTRUCTIONAL_LOGIC / COURSE_ENGINE</span>
+                <h1 class="page-title">Academic Governance</h1>
+                <div class="kpi-grid">
+                    <div class="kpi-card"><span class="kpi-val">142</span><span class="kpi-label">Active Courses</span></div>
+                    <div class="kpi-card"><span class="kpi-val">12</span><span class="kpi-label">Upcoming Seminars</span></div>
+                    <div class="kpi-card"><span class="kpi-val" style="color: #64ffda;">98%</span><span class="kpi-label">Syllabus Coverage</span></div>
+                    <div class="kpi-card"><span class="kpi-val" style="color: var(--gold);">8.2</span><span class="kpi-label">Institutional CGPA</span></div>
+                </div>
+                <div class="slide-up">
+                    <h3 style="font-size: 0.7rem; color: var(--gold); margin-bottom: 20px;">CENTRALIZED TIME-TABLE</h3>
+                    <table class="data-table">
+                        <thead><tr><th>Time</th><th>Subject</th><th>Faculty</th><th>Room</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td>09:00 AM</td><td>Advanced Algorithms</td><td>Dr. R. Verma</td><td>Hall A-12</td><td><span class="status-pill status-verified">IN_SESSION</span></td></tr>
+                            <tr><td>11:30 AM</td><td>Machine Learning V2</td><td>Prof. S. Khan</td><td>Lab 404</td><td><span class="status-pill status-pending">UPCOMING</span></td></tr>
+                            <tr><td>02:00 PM</td><td>Digital Governance</td><td>Dr. J. Doe</td><td>Hall B-02</td><td><span class="status-pill status-pending">UPCOMING</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            "Exams": () => `
+                <span class="breadcrumb">VALIDATION / EXAM_CELL</span>
+                <h1 class="page-title">Examination Engine</h1>
+                <div class="kpi-grid">
+                    <div class="kpi-card"><span class="kpi-val">END_SEM</span><span class="kpi-label">Active Cycle</span></div>
+                    <div class="kpi-card"><span class="kpi-val">8,400</span><span class="kpi-label">Scripts Marked</span></div>
+                    <div class="kpi-card"><span class="kpi-val" style="color: #64ffda;">100%</span><span class="kpi-label">Result Integrity</span></div>
+                    <div class="kpi-card"><span class="kpi-val">04</span><span class="kpi-label">Pending Declarations</span></div>
+                </div>
+                <div style="background: var(--glass); padding: 30px; border-radius: 15px; border: 1px solid var(--glass-border);" class="slide-up">
+                    <h4 style="font-size: 0.8rem; color: var(--gold); margin-bottom: 20px;">RESULT PUBLISHING QUEUE</h4>
+                    <div style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 10px;">
+                        <div style="min-width: 250px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 10px; border: 1px solid var(--glass-border);">
+                            <span class="breadcrumb">B.TECH CS SEM 6</span>
+                            <h5 style="margin: 10px 0;">Final Marks Finalized</h5>
+                            <button class="login-btn" style="padding: 10px; font-size: 0.6rem; margin:0;">PUBLISH TO STUDENT HUB</button>
+                        </div>
+                        <div style="min-width: 250px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 10px; border: 1px solid var(--glass-border);">
+                            <span class="breadcrumb">MBA FIN SEM 2</span>
+                            <h5 style="margin: 10px 0;">Internal Assessment Pending</h5>
+                            <button class="login-btn" style="padding: 10px; font-size: 0.6rem; margin:0; background: var(--slate);">REQUEST MODERATION</button>
+                        </div>
+                    </div>
+                </div>
+            `,
+            "HRMS": () => `
+                <span class="breadcrumb">TALENT_MANAGEMENT / HUMAN_CAPITAL</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h1 class="page-title">Executive HR Hub</h1>
+                    <button class="login-btn" style="width: auto; padding: 12px 25px; font-size: 0.7rem;" onclick="simulateHRAction('Payroll')">RUN_INSTITUTIONAL_PAYROLL</button>
+                </div>
+                <div class="kpi-grid">
+                    <div class="kpi-card"><span class="kpi-val">1,250</span><span class="kpi-label">Active Nodes</span></div>
+                    <div class="kpi-card"><span class="kpi-val" style="color: #64ffda;">98%</span><span class="kpi-label">Attendance Integrity</span></div>
+                    <div class="kpi-card"><span class="kpi-val">12</span><span class="kpi-label">Pending Leaves</span></div>
+                    <div class="kpi-card"><span class="kpi-val">$820K</span><span class="kpi-label">Monthly Payout</span></div>
+                </div>
+                <div class="inner-tabs">
+                    <div class="inner-tab active" onclick="renderHRMSSection('Directory')">Employee Directory</div>
+                    <div class="inner-tab" onclick="renderHRMSSection('Leave')">Leave Management</div>
+                    <div class="inner-tab" onclick="renderHRMSSection('Payroll')">Payroll & Sync</div>
+                    <div class="inner-tab" onclick="renderHRMSSection('Policy')">HR Policy Vault</div>
+                </div>
+                <div id="hrms-section-container">
+                    <div class="slide-up" style="background: var(--glass); padding: 25px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                        <table class="data-table">
+                            <thead><tr><th>Node ID</th><th>Name</th><th>Department</th><th>Designation</th><th>Action</th></tr></thead>
+                            <tbody>
+                                <tr><td>#HR-001</td><td>Dr. Vikram Seth</td><td>Engineering</td><td>Dean Academics</td><td><button class="login-btn" style="padding: 5px 12px; font-size: 0.6rem; margin:0;" onclick="simulateHRAction('Profile')">ENTITY_VIEW</button></td></tr>
+                                <tr><td>#HR-002</td><td>Meera Deshmukh</td><td>Administration</td><td>HR Director</td><td><button class="login-btn" style="padding: 5px 12px; font-size: 0.6rem; margin:0;" onclick="simulateHRAction('Profile')">ENTITY_VIEW</button></td></tr>
+                                <tr><td>#HR-003</td><td>Rahul Dravid</td><td>Sports Hub</td><td>Coach Node-1</td><td><button class="login-btn" style="padding: 5px 12px; font-size: 0.6rem; margin:0;" onclick="simulateHRAction('Profile')">ENTITY_VIEW</button></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `
+        };
+
+        function renderView(viewName) {
+            currentView = viewName;
+            const template = viewTemplates[viewName] || viewTemplates["Dashboard"];
+            contentView.innerHTML = template();
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.innerText.includes(viewName)) item.classList.add('active');
+            });
+
+            // Re-bind generation buttons after render
+            const actionLabels = ["GENERATE", "VERIFY", "CONVERT", "RESOLVE", "EXPORT", "DOWNLOAD", "PUBLISH", "SYNC", "SMS", "RECON", "AUDIT"];
+            document.querySelectorAll('.login-btn').forEach(btn => {
+                const btnText = btn.innerText.toUpperCase();
+                if (actionLabels.some(label => btnText.includes(label))) {
+                    btn.addEventListener('click', () => {
+                        const originalText = btn.innerText;
+                        btn.innerText = "PROCESSING...";
+                        btn.style.opacity = "0.7";
+                        setTimeout(() => {
+                            btn.innerText = "SUCCESS_SYNC";
+                            btn.style.background = "#64ffda";
+                            btn.style.color = "var(--navy-dark)";
+                            setTimeout(() => {
+                                btn.innerText = originalText;
+                                btn.style.background = "";
+                                btn.style.opacity = "1";
+                            }, 1500);
+                        }, 800);
+                    });
+                }
+            });
+
+            // Analytics sub-category logic
+            if (viewName === "Analytics") {
+                const categoryButtons = document.querySelectorAll('.analytics-category');
+                const reportRows = document.querySelectorAll('#analytics-report-list tr');
+
+                categoryButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        categoryButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        const selectedCategory = button.dataset.category;
+
+                        reportRows.forEach(row => {
+                            if (selectedCategory === "All" || row.dataset.category === selectedCategory) {
+                                row.style.display = '';
+                            } else {
+                                row.style.display = 'none';
+                            }
+                        });
+                    });
+                });
+            }
+        }
+
+        campusNodes.forEach(node => {
+            node.addEventListener('click', () => {
+                campusNodes.forEach(n => n.classList.remove('active'));
+                node.classList.add('active');
+                currentCampus = node.innerText;
+
+                // Live Sync Toast Effect
+                const toast = document.createElement('div');
+                toast.style.cssText = "position:fixed; bottom:40px; right:40px; background:var(--gold); color:var(--navy-dark); padding:15px 30px; border-radius:10px; font-weight:900; font-size:0.7rem; letter-spacing:2px; box-shadow:0 10px 30px rgba(0,0,0,0.5); z-index:9999; animation: slideUp 0.4s ease-out;";
+                toast.innerHTML = `CAMPUS_NODE_SYNC: ${currentCampus.toUpperCase()} [ACTIVE]`;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = "0";
+                    setTimeout(() => toast.remove(), 400);
+                }, 2000);
+
+                renderView(currentView);
+            });
+        });
+
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const viewName = item.innerText.replace(/[⊞🎯🎓📚📝💰👥📈🛡️⎋]/g, '').trim();
+                let targetView = viewName;
+                if (viewName.includes("SIS")) targetView = "SIS (Students)";
+                if (viewName === "Termination") {
+                    location.reload();
+                    return;
+                }
+                renderView(targetView);
+            });
+        });
+
+        loginBtn.addEventListener('click', () => {
+            localStorage.setItem('isLoggedIn', 'true');
+            loginScreen.style.opacity = '0';
+            setTimeout(() => {
+                loginScreen.style.display = 'none';
+                prototypeShell.style.display = 'grid';
+                prototypeShell.classList.add('slide-up');
+                renderView("Dashboard");
+            }, 500);
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            localStorage.clear();
+            location.reload();
+        });
+
+        // --- Phase 3 Sub-View Controllers ---
+        function simulateProfileView(studentId = "#CN-9822") {
+            const sisContainer = document.getElementById('sis-container');
+            sisContainer.innerHTML = `
+                <div style="background: var(--glass); padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); display: grid; grid-template-columns: 200px 1fr; gap: 40px; margin-bottom: 40px;" class="slide-up">
+                    <div style="width: 200px; height: 200px; background: rgba(255,255,255,0.05); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: var(--gold); border: 2px dashed var(--gold);">👤</div>
+                    <div>
+                        <h2 style="font-family: 'Playfair Display'; font-size: 2rem; margin-bottom: 5px;">Aarav Malhotra <span style="font-size: 0.9rem; color: var(--gold); font-family: 'Inter'; font-weight: 800;">[${studentId}]</span></h2>
+                        <span class="breadcrumb">B.TECH COMPUTER SCIENCE | SEMESTER 06</span>
+                        <div class="kpi-grid" style="margin-top: 30px; grid-template-columns: repeat(3, 1fr);">
+                            <div class="kpi-card" style="padding: 15px;"><span class="kpi-val" style="font-size: 1.2rem;">9.42</span><span class="kpi-label">CGPA</span></div>
+                            <div class="kpi-card" style="padding: 15px;"><span class="kpi-val" style="font-size: 1.2rem; color: #64ffda;">94%</span><span class="kpi-label">ATTENDANCE</span></div>
+                            <div class="kpi-card" style="padding: 15px;"><span class="kpi-val" style="font-size: 1.2rem; color: #64ffda;">CLEARED</span><span class="kpi-label">FINANCIALS</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inner-tabs">
+                    <div class="inner-tab active" onclick="setProfileTab(this)">Overview</div>
+                    <div class="inner-tab" onclick="setProfileTab(this)">Academics</div>
+                    <div class="inner-tab" onclick="setProfileTab(this)">Attendance</div>
+                    <div class="inner-tab" onclick="setProfileTab(this)">Exams</div>
+                    <div class="inner-tab" onclick="setProfileTab(this)">Fees</div>
+                </div>
+
+                <div id="profile-tab-content" class="slide-up" style="background: var(--glass); padding: 30px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                        <div>
+                            <h4 style="color: var(--gold); font-size: 0.7rem; margin-bottom: 20px;">BIOMETRIC_PROFILE</h4>
+                            <div style="display: flex; flex-direction: column; gap: 15px; font-size: 0.8rem;">
+                                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;"><span>Blood Group</span><span style="color: var(--gold);">O+ Positive</span></div>
+                                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;"><span>Emergency Contact</span><span style="color: var(--gold);">+91 98765-XXXXX</span></div>
+                                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;"><span>Aadhar Verification</span><span class="status-pill status-verified">VERIFIED</span></div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--gold); font-size: 0.7rem; margin-bottom: 20px;">QUICK_ACTIONS</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <button class="login-btn" style="margin:0; font-size:0.6rem; background: var(--glass); border: 1px solid var(--gold); color: var(--gold);">DOWNLOAD_ID_CARD</button>
+                                <button class="login-btn" style="margin:0; font-size:0.6rem;">GENERATE_BONAFIDE</button>
+                                <button class="login-btn" style="margin:0; font-size:0.6rem; background: var(--glass); border: 1px solid var(--gold); color: var(--gold);">PARENT_CONNECT</button>
+                                <button class="login-btn" style="margin:0; font-size:0.6rem;">RESET_PORTAL_KEY</button>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+            `;
+        }
+
+        const profileTabTemplates = {
+            "Overview": `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                    <div>
+                        <h4 style="color: var(--gold); font-size: 0.7rem; margin-bottom: 20px;">BIOMETRIC_PROFILE</h4>
+                        <div style="display: flex; flex-direction: column; gap: 15px; font-size: 0.8rem;">
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;"><span>Blood Group</span><span style="color: var(--gold);">O+ Positive</span></div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;"><span>Emergency Contact</span><span style="color: var(--gold);">+91 98765-XXXXX</span></div>
+                            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;"><span>Aadhar Verification</span><span class="status-pill status-verified">VERIFIED</span></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--gold); font-size: 0.7rem; margin-bottom: 20px;">QUICK_ACTIONS</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <button class="login-btn" style="margin:0; font-size:0.6rem; background: var(--glass); border: 1px solid var(--gold); color: var(--gold);">DOWNLOAD_ID_CARD</button>
+                            <button class="login-btn" style="margin:0; font-size:0.6rem;">GENERATE_BONAFIDE</button>
+                            <button class="login-btn" style="margin:0; font-size:0.6rem; background: var(--glass); border: 1px solid var(--gold); color: var(--gold);">PARENT_CONNECT</button>
+                            <button class="login-btn" style="margin:0; font-size:0.6rem;">RESET_PORTAL_KEY</button>
+                        </div>
+                    </div>
+                </div>
+            `,
+            "Academics": `
+                <div class="slide-up">
+                    <h4 style="color: var(--gold); font-size: 0.7rem; margin-bottom: 20px;">SEMESTER_WISE_PERFORMANCE</h4>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Semester</th><th>Major Subject</th><th>Credits</th><th>Grade</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Semester 05</td><td>Algorithm Design</td><td>4.0</td><td>A+</td><td><span class="status-pill status-verified">COMPLETED</span></td></tr>
+                            <tr><td>Semester 05</td><td>Database Systems</td><td>3.0</td><td>A</td><td><span class="status-pill status-verified">COMPLETED</span></td></tr>
+                            <tr><td>Semester 06</td><td>Machine Learning</td><td>4.0</td><td>TBD</td><td><span class="status-pill status-pending">IN_PROGRESS</span></td></tr>
+                            <tr><td>Semester 06</td><td>Cloud Computing</td><td>3.0</td><td>TBD</td><td><span class="status-pill status-pending">IN_PROGRESS</span></td></tr>
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 30px; padding: 20px; background: rgba(100, 255, 218, 0.05); border-radius: 10px; border: 1px solid rgba(100, 255, 218, 0.2);">
+                        <span style="font-size: 0.65rem; color: var(--gold); font-weight: 800; letter-spacing: 1px;">ACADEMIC_ADVISORY_NOTE</span>
+                        <p style="font-size: 0.8rem; margin-top: 5px; color: var(--white);">Student is eligible for the "Elite Scholar" track. Maintaining a CGPA above 9.0 is recommended for Semester 06.</p>
+                    </div>
+                </div>
+            `,
+            "Attendance": `
+                <div class="slide-up">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                        <div style="background: var(--glass); padding: 20px; border-radius: 10px; border: 1px solid var(--glass-border);">
+                            <h5 style="font-size: 0.65rem; color: var(--gold); margin-bottom: 15px;">SUBJECT_PENETRATION</h5>
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 5px;"><span>Advanced OS</span><span>96%</span></div>
+                                    <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;"><div style="width: 96%; height: 100%; background: var(--gold); border-radius: 3px;"></div></div>
+                                </div>
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 5px;"><span>Software Dev Meta</span><span>89%</span></div>
+                                    <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;"><div style="width: 89%; height: 100%; background: var(--gold); border-radius: 3px;"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="background: var(--glass); padding: 20px; border-radius: 10px; border: 1px solid var(--glass-border);">
+                            <h5 style="font-size: 0.65rem; color: var(--gold); margin-bottom: 15px;">CUMULATIVE_LOG</h5>
+                            <div style="text-align: center; padding: 10px 0;">
+                                <span style="font-size: 2.5rem; font-weight: 900; color: var(--gold);">94.2%</span><br>
+                                <span style="font-size: 0.6rem; color: var(--slate); letter-spacing: 2px;">AGGREGATE_NODE_INTEGRITY</span>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Date</th><th>Session</th><th>Mode</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Feb 18, 2026</td><td>Morning (09:00)</td><td>BIO_METRIC</td><td><span class="status-pill status-verified">PRESENT</span></td></tr>
+                            <tr><td>Feb 19, 2026</td><td>Evening (02:00)</td><td>BIO_METRIC</td><td><span class="status-pill status-verified">PRESENT</span></td></tr>
+                            <tr><td>Feb 20, 2026</td><td>Morning (09:00)</td><td>GEO_SYNC</td><td><span class="status-pill status-verified">PRESENT</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            "Exams": `
+                <div class="slide-up">
+                    <h4 style="color: var(--gold); font-size: 0.7rem; margin-bottom: 20px;">EXAMINATION_TIMELINE</h4>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="background: var(--glass); padding: 20px; border-radius: 12px; border-left: 4px solid var(--gold); display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-size: 0.6rem; color: var(--gold); letter-spacing: 1px;">UPCOMING_DEC_2026</span>
+                                <h5 style="font-size: 0.9rem; margin-top: 5px;">Final Theory: Distributed Systems</h5>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-size: 0.8rem; font-weight: 800;">MAR 12, 2026</span><br>
+                                <span style="font-size: 0.6rem; color: var(--slate);">HALL_B-404</span>
+                            </div>
+                        </div>
+                        <div style="background: var(--glass); padding: 20px; border-radius: 12px; border-left: 4px solid var(--slate); display: flex; justify-content: space-between; align-items: center; opacity: 0.8;">
+                            <div>
+                                <span style="font-size: 0.6rem; color: var(--slate); letter-spacing: 1px;">HISTORICAL_JUL_2025</span>
+                                <h5 style="font-size: 0.9rem; margin-top: 5px;">Mid-Term: Neural Networks</h5>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="font-size: 0.8rem; font-weight: 800; color: #10B981;">VERIFIED_A+</span><br>
+                                <span style="font-size: 0.6rem; color: var(--slate);">PUBLISHED</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            "Fees": `
+                <div class="slide-up">
+                    <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 30px;">
+                        <div class="kpi-card" style="padding: 15px;"><span class="kpi-val" style="font-size: 1.2rem;">$8,500</span><span class="kpi-label">TOTAL_DUE</span></div>
+                        <div class="kpi-card" style="padding: 15px;"><span class="kpi-val" style="font-size: 1.2rem; color: #10B981;">$7,200</span><span class="kpi-label">PAID_AMOUNT</span></div>
+                        <div class="kpi-card" style="padding: 15px;"><span class="kpi-val" style="font-size: 1.2rem; color: var(--gold);">$1,300</span><span class="kpi-label">BALANCE</span></div>
+                    </div>
+                    <h4 style="color: var(--gold); font-size: 0.7rem; margin-bottom: 20px;">TRANSACTION_LEDGER</h4>
+                    <table class="data-table" style="font-size: 0.75rem;">
+                        <thead>
+                            <tr><th>Receipt #</th><th>Description</th><th>Date</th><th>Amount</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>#REC-4412</td><td>Tuition Fee - Sem 06</td><td>Jan 15, 2026</td><td>$4,500</td><td><span class="status-pill status-verified">SUCCESS</span></td></tr>
+                            <tr><td>#REC-4201</td><td>Hostel & Amenities</td><td>Jan 12, 2026</td><td>$2,700</td><td><span class="status-pill status-verified">SUCCESS</span></td></tr>
+                            <tr><td>#PEND-901</td><td>Lab Consumables</td><td>TBD</td><td>$1,300</td><td><span class="status-pill status-pending" style="background: rgba(197, 160, 89, 0.1); color: var(--gold);">OUTSTANDING</span></td></tr>
+                        </tbody>
+                    </table>
+                    <button class="login-btn" style="margin-top: 25px; width: auto; padding: 12px 30px; font-size: 0.7rem;">PROCEED_TO_INSTANT_PAY</button>
+                </div>
+            `
+        };
+
+        function setProfileTab(el) {
+            document.querySelectorAll('.inner-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            const tabName = el.innerText.trim();
+            const content = document.getElementById('profile-tab-content');
+
+            // Case-insensitive lookup
+            const templateKey = Object.keys(profileTabTemplates).find(
+                key => key.toLowerCase() === tabName.toLowerCase()
+            );
+
+            content.style.opacity = '0';
+            setTimeout(() => {
+                content.innerHTML = profileTabTemplates[templateKey] || `
+                    <h3 style="color: var(--gold); font-size: 1rem;">${tabName.toUpperCase()}_DATA_NODE</h3>
+                    <p style="color: var(--slate); font-size: 0.8rem; margin-top: 10px;">Simulated real-time synchronization for scholar entity: ${tabName}...</p>
+                `;
+                content.style.opacity = '1';
+                content.classList.add('slide-up');
+            }, 200);
+        }
+
+        const financeSectionTemplates = {
+            "Dashboard": `
+                <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px;" class="slide-up">
+                    <div style="background: var(--glass); padding: 25px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                        <h4 style="font-size: 0.7rem; color: var(--gold); margin-bottom: 20px;">COLLECTION_VELOCITY</h4>
+                        <div style="height: 200px; display: flex; align-items: flex-end; gap: 15px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <div style="flex: 1; height: 40%; background: var(--glass); border: 1px solid var(--gold); position:relative;"><span style="position:absolute; top:-20px; width:100%; text-align:center; font-size:0.6rem;">OCT</span></div>
+                            <div style="flex: 1; height: 60%; background: var(--glass); border: 1px solid var(--gold); position:relative;"><span style="position:absolute; top:-20px; width:100%; text-align:center; font-size:0.6rem;">NOV</span></div>
+                            <div style="flex: 1; height: 85%; background: var(--glass); border: 1px solid var(--gold); position:relative;"><span style="position:absolute; top:-20px; width:100%; text-align:center; font-size:0.6rem;">DEC</span></div>
+                            <div style="flex: 1; height: 70%; background: var(--glass); border: 1px solid var(--gold); position:relative;"><span style="position:absolute; top:-20px; width:100%; text-align:center; font-size:0.6rem;">JAN</span></div>
+                            <div style="flex: 1; height: 95%; background: var(--gold); box-shadow: 0 0 20px var(--gold); position:relative;"><span style="position:absolute; top:-20px; width:100%; text-align:center; font-size:0.6rem; color:var(--gold);">FEB</span></div>
+                        </div>
+                        <button class="login-btn" style="margin-top: 30px; font-size: 0.65rem; padding: 12px;" onclick="simulateFeeDemand()">TRIGGER_FEE_DEMAND_GENERATION</button>
+                    </div>
+                    <div style="background: var(--glass); padding: 25px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                        <h4 style="font-size: 0.7rem; color: var(--gold); margin-bottom: 20px;">REAL-TIME_RECONCILIATION</h4>
+                        <table class="data-table" style="font-size: 0.7rem;">
+                            <thead><tr><th>Ref ID</th><th>Student Node</th><th>Mode</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <tr><td>#FT-8812</td><td>Aarav Malhotra</td><td>GATEWAY</td><td><span class="status-pill status-verified">VERIFIED</span></td></tr>
+                                <tr><td>#FT-8813</td><td>Isha Kapur</td><td>NEFT</td><td><button class="login-btn" style="padding: 5px 10px; font-size:0.55rem; margin:0; width:auto;">RESOLVE</button></td></tr>
+                                <tr><td>#FT-8815</td><td>Sanya V.</td><td>GATEWAY</td><td><span class="status-pill status-verified">VERIFIED</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `,
+            "FeeStructure": `
+                <div class="slide-up">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h4 style="font-size: 0.7rem; color: var(--gold);">INSTITUTIONAL_TARIFF_MASTER</h4>
+                        <button class="login-btn" style="width: auto; margin:0; padding: 10px 20px; font-size: 0.6rem;">ADD_NEW_COURSE_SLAB</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Program Code</th><th>Tuition Fee</th><th>Hostel Node</th><th>Misc. Sync</th><th>Total/Year</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>B.TECH (ENG-CS)</td><td>$4,500</td><td>$2,200</td><td>$800</td><td><strong style="color:var(--gold);">$7,500</strong></td></tr>
+                            <tr><td>MBA (BUS-FIN)</td><td>$6,200</td><td>$2,200</td><td>$1,100</td><td><strong style="color:var(--gold);">$9,500</strong></td></tr>
+                            <tr><td>M.TECH (AI-ROB)</td><td>$5,800</td><td>$2,500</td><td>$1,200</td><td><strong style="color:var(--gold);">$9,500</strong></td></tr>
+                            <tr><td>B.ARCH (DSN-01)</td><td>$4,200</td><td>$2,200</td><td>$900</td><td><strong style="color:var(--gold);">$7,300</strong></td></tr>
+                        </tbody>
+                    </table>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                        <div style="background: rgba(100, 255, 218, 0.05); padding: 20px; border-radius: 10px; border: 1px solid rgba(100, 255, 218, 0.2);">
+                            <h5 style="font-size: 0.65rem; color: var(--gold); margin-bottom: 10px;">SCHOLARSHIP_PROTOCOLS</h5>
+                            <p style="font-size: 0.75rem;">Merit Sync [9.5+ CGPA]: 25% Waiver Applied<br>Institutional Node Discount: $500 Flat Sync</p>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 10px; border: 1px solid var(--glass-border);">
+                            <h5 style="font-size: 0.65rem; color: var(--slate); margin-bottom: 10px;">LATE_FEE_LOGIC</h5>
+                            <p style="font-size: 0.75rem;">Grace Period: 07 Days<br>Deduction: $10/Day Post Threshold</p>
+                        </div>
+                    </div>
+                </div>
+            `,
+            "Collection": `
+                <div class="slide-up">
+                    <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border); margin-bottom: 30px; display: flex; gap: 15px; align-items: center;">
+                        <input type="date" style="background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); padding: 10px; border-radius: 5px; color: var(--white); font-size: 0.75rem;">
+                        <span style="color:var(--slate);">to</span>
+                        <input type="date" style="background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); padding: 10px; border-radius: 5px; color: var(--white); font-size: 0.75rem;">
+                        <button class="login-btn" style="width: auto; margin:0; padding: 10px 20px; font-size: 0.65rem;">SYNC_LEDGER_RANGE</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Receipt Node</th><th>Payer Entity</th><th>Gateway</th><th>Timestamp</th><th>Amount</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>#R-00921</td><td>Aarav Malhotra</td><td>RAZOR_SYNC</td><td>10:42:01</td><td>$4,500</td></tr>
+                            <tr><td>#R-00922</td><td>Isha Kapur</td><td>NEFT_STRIPE</td><td>09:15:22</td><td>$2,700</td></tr>
+                            <tr><td>#R-00923</td><td>Zaid Ahmed</td><td>CASH_NODE_01</td><td>08:55:00</td><td>$1,300</td></tr>
+                            <tr><td>#R-00924</td><td>Sanya V.</td><td>UPI_GATEWAY</td><td>Yesterday</td><td>$500</td></tr>
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 20px; text-align: right;">
+                        <span style="font-size: 0.7rem; color: var(--slate);">DAILY_COLLECTION_SUM: </span>
+                        <span style="font-size: 1.2rem; font-weight: 900; color: #10B981;">$9,000.00</span>
+                    </div>
+                </div>
+            `,
+            "Reports": `
+                <div class="slide-up">
+                    <h4 style="font-size: 0.7rem; color: var(--gold); margin-bottom: 20px;">FINANCIAL_INTELLIGENCE_TEMPLATES</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border); text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 10px;">📊</div>
+                            <h5 style="font-size: 0.8rem; margin-bottom: 5px;">Revenue vs Projection</h5>
+                            <span style="font-size: 0.6rem; color: var(--slate);">MONTHLY_SYNC_V3</span>
+                            <button class="login-btn" style="margin-top: 15px; font-size: 0.6rem; padding: 8px;">GET_REPORT</button>
+                        </div>
+                        <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border); text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 10px;">📉</div>
+                            <h5 style="font-size: 0.8rem; margin-bottom: 5px;">Outstanding Dues Sync</h5>
+                            <span style="font-size: 0.6rem; color: var(--slate);">AGEING_ANALYSIS</span>
+                            <button class="login-btn" style="margin-top: 15px; font-size: 0.6rem; padding: 8px;">GET_REPORT</button>
+                        </div>
+                        <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border); text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 10px;">🧾</div>
+                            <h5 style="font-size: 0.8rem; margin-bottom: 5px;">Tax Compliance Log</h5>
+                            <span style="font-size: 0.6rem; color: var(--slate);">FY_2025_AUDIT</span>
+                            <button class="login-btn" style="margin-top: 15px; font-size: 0.6rem; padding: 8px;">GET_REPORT</button>
+                        </div>
+                    </div>
+                    <div style="margin-top: 30px; padding: 25px; background: rgba(255, 255, 255, 0.02); border-radius: 15px; border: 1px solid var(--glass-border);">
+                        <h5 style="font-size: 0.7rem; color: var(--gold); margin-bottom: 15px;">ADVANCED_AUDIT_QUERY</h5>
+                        <div style="display: flex; gap: 10px;">
+                            <select style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; padding: 10px; border-radius: 5px; outline: none;">
+                                <option>Select Academic Year</option>
+                                <option>2025-26</option>
+                                <option>2024-25</option>
+                            </select>
+                            <button class="login-btn" style="width: auto; margin:0; padding: 10px 25px; font-size: 0.65rem;">TRIGGER_GENERIC_GEN</button>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        const hrmsSectionTemplates = {
+            "Directory": `
+                <div class="slide-up" style="background: var(--glass); padding: 25px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                    <table class="data-table">
+                        <thead><tr><th>Node ID</th><th>Name</th><th>Department</th><th>Designation</th><th>Action</th></tr></thead>
+                        <tbody>
+                            <tr><td>#HR-001</td><td>Dr. Vikram Seth</td><td>Engineering</td><td>Dean Academics</td><td><button class="login-btn" style="padding: 5px 12px; font-size: 0.6rem; margin:0;" onclick="simulateHRAction('Profile')">ENTITY_VIEW</button></td></tr>
+                            <tr><td>#HR-002</td><td>Meera Deshmukh</td><td>Administration</td><td>HR Director</td><td><button class="login-btn" style="padding: 5px 12px; font-size: 0.6rem; margin:0;" onclick="simulateHRAction('Profile')">ENTITY_VIEW</button></td></tr>
+                            <tr><td>#HR-003</td><td>Rahul Dravid</td><td>Sports Hub</td><td>Coach Node-1</td><td><button class="login-btn" style="padding: 5px 12px; font-size: 0.6rem; margin:0;" onclick="simulateHRAction('Profile')">ENTITY_VIEW</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            "Leave": `
+                <div class="slide-up">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
+                        <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                            <span style="font-size: 0.6rem; color: var(--gold);">EARNED_LEAVE</span>
+                            <div style="font-size: 1.5rem; margin-top: 5px;">24 <span style="font-size: 0.7rem; color: var(--slate);">Days Available</span></div>
+                        </div>
+                        <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                            <span style="font-size: 0.6rem; color: var(--gold);">SICK_LEAVE_CREDIT</span>
+                            <div style="font-size: 1.5rem; margin-top: 5px;">12 <span style="font-size: 0.7rem; color: var(--slate);">Days Available</span></div>
+                        </div>
+                        <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border);">
+                            <span style="font-size: 0.6rem; color: #64ffda;">PENDING_APPROVALS</span>
+                            <div style="font-size: 1.5rem; margin-top: 5px;">08 <span style="font-size: 0.7rem; color: var(--slate);">Queue Nodes</span></div>
+                        </div>
+                    </div>
+                    <h4 style="font-size: 0.7rem; color: var(--gold); margin-bottom: 20px;">ACTIVE_LEAVE_REQUESTS</h4>
+                    <table class="data-table">
+                        <thead><tr><th>Employee Entity</th><th>Request Type</th><th>Period Sync</th><th>Status Node</th><th>Action</th></tr></thead>
+                        <tbody>
+                            <tr><td>Aarav Malhotra</td><td>Sabbatical Node</td><td>Mar 01 - Mar 15</td><td><span class="status-pill status-pending">PENDING_DEAN</span></td><td><button class="login-btn" style="padding: 5px 12px; font-size: 0.6rem; margin:0; width:auto;">REVIEW</button></td></tr>
+                            <tr><td>Isha Kapur</td><td>Earned Leave</td><td>Today</td><td><span class="status-pill status-verified">APPROVED</span></td><td><button class="login-btn" style="padding: 5px 12px; font-size: 0.6rem; margin:0; width:auto; background:var(--glass);">VIEW_DOCS</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            "Payroll": `
+                <div class="slide-up">
+                    <div style="background: rgba(100, 255, 218, 0.05); padding: 25px; border-radius: 15px; border: 1px solid rgba(100, 255, 218, 0.2); margin-bottom: 30px;">
+                        <h4 style="font-size: 0.7rem; color: #64ffda; margin-bottom: 15px;">PAYROLL_SYNCHRONIZATION_ENGINE</h4>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span style="font-size: 0.7rem; color: var(--slate);">Current Cycle: </span>
+                                <span style="font-size: 0.9rem; font-weight: 800;">FEBRUARY 2026</span>
+                            </div>
+                            <button class="login-btn" style="width: auto; margin:0; padding: 12px 30px; font-size: 0.7rem;">EXECUTE_DISBURSEMENT_BATCH</button>
+                        </div>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>Disbursement ID</th><th>Component</th><th>Budget Node</th><th>Amount Sync</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td>#PAY-9912</td><td>Faculty Salaries</td><td>ACADEMIC_FUND</td><td>$420,000</td><td><span class="status-pill status-verified">DISBURSED</span></td></tr>
+                            <tr><td>#PAY-9913</td><td>Operational Staff</td><td>ADMIN_EXPENSE</td><td>$210,000</td><td><span class="status-pill status-verified">DISBURSED</span></td></tr>
+                            <tr><td>#PAY-9914</td><td>External Consultants</td><td>PROJECT_SYNC</td><td>$45,000</td><td><span class="status-pill status-pending">IN_TRANSIT</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            "Policy": `
+                <div class="slide-up">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h4 style="font-size: 0.7rem; color: var(--gold);">REGULATORY_COMPLIANCE_VAULT</h4>
+                        <button class="login-btn" style="width: auto; margin:0; padding: 10px 20px; font-size: 0.65rem;">UPLOAD_POLICY_AMMENDMENT</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border); display: flex; align-items: start; gap: 15px;">
+                            <div style="font-size: 1.5rem;">📜</div>
+                            <div>
+                                <h5 style="font-size: 0.8rem; margin-bottom: 5px;">Institutional Code of Ethics</h5>
+                                <span style="font-size: 0.6rem; color: var(--slate);">VERSION_2025.04_FINAL</span>
+                                <button class="login-btn" style="margin-top: 10px; font-size: 0.6rem; padding: 6px 15px; width:auto; display:block;">DOWNLOAD_PDF</button>
+                            </div>
+                        </div>
+                        <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border); display: flex; align-items: start; gap: 15px;">
+                            <div style="font-size: 1.5rem;">⚖️</div>
+                            <div>
+                                <h5 style="font-size: 0.8rem; margin-bottom: 5px;">Employee Benefits Protocol</h5>
+                                <span style="font-size: 0.6rem; color: var(--slate);">REVISED_JAN_2026</span>
+                                <button class="login-btn" style="margin-top: 10px; font-size: 0.6rem; padding: 6px 15px; width:auto; display:block;">DOWNLOAD_PDF</button>
+                            </div>
+                        </div>
+                        <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border); display: flex; align-items: start; gap: 15px;">
+                            <div style="font-size: 1.5rem;">🛡️</div>
+                            <div>
+                                <h5 style="font-size: 0.8rem; margin-bottom: 5px;">IT & Data Privacy Policy</h5>
+                                <span style="font-size: 0.6rem; color: var(--slate);">AUDIT_READY_2026</span>
+                                <button class="login-btn" style="margin-top: 10px; font-size: 0.6rem; padding: 6px 15px; width:auto; display:block;">DOWNLOAD_PDF</button>
+                            </div>
+                        </div>
+                        <div style="background: var(--glass); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border); display: flex; align-items: start; gap: 15px;">
+                            <div style="font-size: 1.5rem;">🏥</div>
+                            <div>
+                                <h5 style="font-size: 0.8rem; margin-bottom: 5px;">Health & Safety Guidelines</h5>
+                                <span style="font-size: 0.6rem; color: var(--slate);">GOVT_COMPLIANCE_SLOT_01</span>
+                                <button class="login-btn" style="margin-top: 10px; font-size: 0.6rem; padding: 6px 15px; width:auto; display:block;">DOWNLOAD_PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        function renderHRMSSection(section) {
+            const container = document.getElementById('hrms-section-container');
+            if (!container) return;
+
+            // Handle tab switching
+            document.querySelectorAll('.inner-tab').forEach(t => {
+                const text = t.innerText.trim();
+                const mapping = {
+                    'Directory': 'Employee Directory',
+                    'Leave': 'Leave Management',
+                    'Payroll': 'Payroll & Sync',
+                    'Policy': 'HR Policy Vault'
+                };
+                if (text === mapping[section] || text === section) {
+                    t.parentElement.querySelectorAll('.inner-tab').forEach(it => it.classList.remove('active'));
+                    t.classList.add('active');
+                }
+            });
+
+            container.style.opacity = '0';
+            setTimeout(() => {
+                container.innerHTML = hrmsSectionTemplates[section] || `<div style="background: var(--glass); padding: 50px; border-radius: 15px; border: 1px solid var(--glass-border);" class="slide-up"><h3 style="color: var(--gold);">${section.toUpperCase()}_HR_VAULT</h3><p style="color: var(--slate); margin-top:10px;">Accessing human capital secure node for ${section}...</p></div>`;
+                container.style.opacity = '1';
+
+                // Re-bind actions for new templates
+                const actionLabels = ["EXECUTE", "UPLOAD", "DOWNLOAD", "REVIEW", "ENTITY_VIEW"];
+                container.querySelectorAll('.login-btn').forEach(btn => {
+                    const btnText = btn.innerText.toUpperCase();
+                    if (actionLabels.some(label => btnText.includes(label))) {
+                        btn.onclick = () => {
+                            const originalText = btn.innerText;
+                            btn.innerText = "PROCESSING...";
+                            btn.style.opacity = "0.7";
+                            setTimeout(() => {
+                                btn.innerText = "ACTION_SUCCESS";
+                                btn.style.background = "#64ffda";
+                                btn.style.color = "var(--navy-dark)";
+                                setTimeout(() => {
+                                    btn.innerText = originalText;
+                                    btn.style.background = "";
+                                    btn.style.opacity = "1";
+                                }, 1500);
+                            }, 800);
+                        };
+                    }
+                });
+            }, 300);
+        }
+
+        function renderFinanceSection(section) {
+            const container = document.getElementById('finance-section-container');
+            document.querySelectorAll('.inner-tab').forEach(t => t.classList.remove('active'));
+
+            // Normalize section identifying string for case-insensitive lookup
+            let targetTab = null;
+            document.querySelectorAll('.inner-tab').forEach(t => {
+                const text = t.innerText.trim();
+                // Map logical session names to UI text if needed
+                const mapping = {
+                    'Dashboard': 'Governance Dashboard',
+                    'FeeStructure': 'Fee Structure',
+                    'Collection': 'Collection Register',
+                    'Reports': 'Financial Reports'
+                };
+
+                if (text === mapping[section] || text === section) {
+                    t.classList.add('active');
+                    targetTab = t;
+                }
+            });
+
+            container.style.opacity = '0';
+            setTimeout(() => {
+                container.innerHTML = financeSectionTemplates[section] || `<div style="background: var(--glass); padding: 50px; border-radius: 15px; border: 1px solid var(--glass-border);" class="slide-up"><h3 style="color: var(--gold);">${section.toUpperCase()}_VAULT</h3><p style="color: var(--slate); margin-top:10px;">Accessing financial secure node for ${section}...</p></div>`;
+                container.style.opacity = '1';
+
+                // Re-bind actions for new templates
+                const actionLabels = ["GET", "SYNC", "TRIGGER", "ADD", "RESOLVE"];
+                container.querySelectorAll('.login-btn').forEach(btn => {
+                    const btnText = btn.innerText.toUpperCase();
+                    if (actionLabels.some(label => btnText.includes(label))) {
+                        btn.onclick = () => {
+                            const originalText = btn.innerText;
+                            btn.innerText = "PROCESSING...";
+                            btn.style.opacity = "0.7";
+                            setTimeout(() => {
+                                btn.innerText = "SUCCESS_SYNC";
+                                btn.style.background = "#64ffda";
+                                btn.style.color = "var(--navy-dark)";
+                                setTimeout(() => {
+                                    btn.innerText = originalText;
+                                    btn.style.background = "";
+                                    btn.style.opacity = "1";
+                                }, 1500);
+                            }, 800);
+                        };
+                    }
+                });
+            }, 300);
+        }
+
+        function simulateFeeDemand() {
+            const toast = document.createElement('div');
+            toast.style.cssText = "position:fixed; bottom:40px; left:50%; transform:translateX(-50%); background:#64ffda; color:var(--navy-dark); padding:20px 40px; border-radius:15px; font-weight:900; font-size:0.8rem; letter-spacing:2px; box-shadow:0 10px 40px rgba(0,0,0,0.5); z-index:9999; animation: slideUp 0.4s ease-out;";
+            toast.innerHTML = `SUCCESS: 8,442 FEE_DEMAND_VOUCHERS GENERATED`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // Global Search Logic
+        document.getElementById('globalSearch').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = e.target.value.toUpperCase();
+                if (query.includes('CN-') || query.includes('AARAV')) {
+                    renderView('SIS (Students)');
+                    setTimeout(() => simulateProfileView('#CN-9822'), 200);
+                } else {
+                    simulateFeeDemand(); // Reusing toast for "Record not found"
+                    document.querySelector('div:last-child').innerHTML = `SEARCH_FAIL: NO ENTITY MATCHING [${query}]`;
+                }
+                e.target.value = '';
+            }
+        });
+        function simulateHRAction(action) {
+            const toast = document.createElement('div');
+            toast.style.cssText = "position:fixed; bottom:40px; left:50%; transform:translateX(-50%); background:#64ffda; color:var(--navy-dark); padding:20px 40px; border-radius:15px; font-weight:900; font-size:0.8rem; letter-spacing:2px; box-shadow:0 10px 40px rgba(0,0,0,0.5); z-index:9999; animation: slideUp 0.4s ease-out;";
+            toast.innerHTML = `SUCCESS: HR_NODE_ACTION [${action.toUpperCase()}] EXECUTED`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+        function selectCollege(name) {
+            localStorage.setItem('activeCollege', name);
+            // We use a small timeout to let the dropdown close visually before reload
+            document.querySelector('.college-selector').classList.remove('active');
+
+            // Show a temporary transition overlay for elite UX
+            const overlay = document.createElement('div');
+            overlay.style.cssText = "position:fixed; top:0; left:0; width:100%; height:100%; background:var(--navy-dark); z-index:10000; display:flex; align-items:center; justify-content:center; opacity:0; transition: opacity 0.4s ease;";
+            overlay.innerHTML = `<div style="text-align:center;"><h2 class="logo-main" style="font-size:1.5rem;">Campus<span>Nexus</span></h2><p style="color:var(--gold); font-size:0.7rem; margin-top:20px; letter-spacing:3px;">SYNCHRONIZING_GOVERNANCE_NODE...</p></div>`;
+            document.body.appendChild(overlay);
+
+            setTimeout(() => {
+                overlay.style.opacity = "1";
+                setTimeout(() => {
+                    location.reload();
+                }, 800);
+            }, 100);
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.college-selector')) {
+                document.querySelector('.college-selector').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+
+</html>
