@@ -131,7 +131,6 @@ body {
 /* --- Sidebar --- */
 .sidebar {
     position: relative;
-    /* Contain absolute children */
     width: 280px;
     height: 100vh;
     background: var(--navy-dark);
@@ -141,7 +140,23 @@ body {
     flex-direction: column;
     z-index: 100;
     border-right: 1px solid var(--glass-border);
-    overflow: hidden;
+}
+
+#nav-container {
+    flex: 1;
+    overflow-y: auto;
+    margin-right: -10px;
+    /* Offset scrollbar space */
+    padding-right: 10px;
+}
+
+#nav-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+#nav-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
 }
 
 #sidebar-overlay {

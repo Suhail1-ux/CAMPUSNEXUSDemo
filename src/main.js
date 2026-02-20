@@ -8,9 +8,9 @@ class CampusNexusApp {
     constructor() {
         this.ctx = null;
         this.particles = [];
-        this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        this.userRole = localStorage.getItem('userRole') || 'Management';
-        this.activeCollege = localStorage.getItem('activeCollege') || 'MAIN_CAMPUS';
+        this.isLoggedIn = false;
+        this.userRole = 'Management';
+        this.activeCollege = 'MAIN_CAMPUS';
 
         this.init();
     }
@@ -309,7 +309,7 @@ class CampusNexusApp {
                 this.executeActionSequence(actionTrigger.dataset.action);
             }
 
-            if (e.target.id === 'logout-trigger') this.handleLogout();
+            if (e.target.closest('#logout-trigger')) this.handleLogout();
         });
     }
 
@@ -553,6 +553,7 @@ class CampusNexusApp {
         if (collegeSelect) {
             collegeSelect.onchange = (e) => {
                 this.activeCollege = e.target.value;
+                localStorage.setItem('activeCollege', this.activeCollege);
                 this.showToast(`CAMPUS_SYNC: ${this.activeCollege}`);
                 this.renderView('Dashboard');
             };
@@ -594,11 +595,18 @@ class CampusNexusApp {
             document.body.style.overflow = '';
         };
 
-        toggle.addEventListener('click', () => {
+        // Remove existing listener to prevent duplication
+        const newToggle = toggle.cloneNode(true);
+        toggle.parentNode.replaceChild(newToggle, toggle);
+
+        newToggle.addEventListener('click', () => {
             sidebar.classList.contains('sidebar-open') ? closeSidebar() : openSidebar();
         });
 
-        overlay.addEventListener('click', closeSidebar);
+        const newOverlay = overlay.cloneNode(true);
+        overlay.parentNode.replaceChild(newOverlay, overlay);
+
+        newOverlay.addEventListener('click', closeSidebar);
 
         // Auto-close sidebar when a nav-item is tapped on mobile
         document.querySelectorAll('#nav-container .nav-item').forEach(item => {
@@ -614,8 +622,9 @@ class CampusNexusApp {
     }
 
     checkInitialState() {
-        const savedRole = localStorage.getItem('userRole');
-        if (savedRole) this.userRole = savedRole;
+        this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        this.userRole = localStorage.getItem('userRole') || 'Management';
+        this.activeCollege = localStorage.getItem('activeCollege') || 'MAIN_CAMPUS';
     }
 
     // --- Background Animation ---
