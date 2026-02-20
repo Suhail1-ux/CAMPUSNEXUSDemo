@@ -63,8 +63,11 @@
         left: 0;
         height: 100vh;
         transform: translateX(-100%);
-        z-index: 200;
+        z-index: 2000;
+        /* Above bottom nav */
         box-shadow: 4px 0 30px rgba(0, 0, 0, 0.6);
+        padding-bottom: 90px;
+        /* Clearance for bottom nav and device safely */
     }
 
     /* Sidebar open state */
@@ -78,6 +81,8 @@
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
+        z-index: 1999;
+        /* Just below sidebar */
     }
 
     #sidebar-overlay.active {
