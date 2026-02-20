@@ -1,0 +1,412 @@
+/* =============================================================
+   CAMPUSNEXUS ERP — RESPONSIVE OVERRIDES
+   Professional Mobile-First Adaptive Styling
+   ============================================================= */
+
+/* =============================================================
+   TABLET  (≤ 1024px)
+   ============================================================= */
+@media (max-width: 1024px) {
+    :root {
+        --sidebar-width: 230px;
+    }
+
+    .app-shell {
+        grid-template-columns: var(--sidebar-width) 1fr;
+    }
+
+    .search-bar {
+        max-width: 280px;
+    }
+
+    .profile-chip span {
+        display: none;
+    }
+
+    #view-container {
+        padding: 20px;
+    }
+
+    .kpi-grid {
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 14px;
+    }
+
+    .profile-modal {
+        padding: 28px !important;
+    }
+}
+
+/* =============================================================
+   MOBILE  (≤ 768px)
+   ============================================================= */
+@media (max-width: 768px) {
+
+    /* Body: allow vertical scroll */
+    body {
+        overflow-y: auto;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    /* --- Shell: single column, sidebar off-canvas --- */
+    .app-shell {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    /* Sidebar off-canvas */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        transform: translateX(-100%);
+        z-index: 200;
+        box-shadow: 4px 0 30px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Sidebar open state */
+    .sidebar.sidebar-open {
+        transform: translateX(0);
+    }
+
+    /* Overlay logic: only show when active */
+    #sidebar-overlay {
+        display: block;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    #sidebar-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Main content adjustment */
+    .main-content {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* --- Header Refinement --- */
+    .header {
+        height: 64px;
+        padding: 0 16px;
+        gap: 12px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    /* Menu Toggle Button */
+    #menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: 8px;
+        font-size: 1.2rem;
+    }
+
+    /* Hide search bar on mobile */
+    .search-bar {
+        display: none;
+    }
+
+    /* Header Actions */
+    .header-actions {
+        gap: 10px;
+        margin-left: auto;
+    }
+
+    /* College Select */
+    #college-select {
+        font-size: 0.7rem !important;
+        padding: 5px 10px !important;
+        max-width: 120px;
+    }
+
+    /* Profile Chip */
+    .profile-chip {
+        padding: 4px;
+        background: none;
+        border: none;
+    }
+
+    .profile-chip span {
+        display: none;
+    }
+
+    /* --- View Container --- */
+    #view-container {
+        padding: 20px 16px;
+        padding-bottom: 90px;
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    /* --- Page Title --- */
+    .page-title {
+        font-size: 1.4rem;
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
+
+    /* --- KPI Grid --- */
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .kpi-card {
+        padding: 18px 14px;
+    }
+
+    .kpi-val {
+        font-size: 1.3rem;
+    }
+
+    .kpi-label {
+        font-size: 0.6rem;
+    }
+
+    /* --- Filter Bar --- */
+    .filters-bar {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 12px !important;
+        padding: 15px !important;
+    }
+
+    .filters-bar select,
+    .filters-bar input,
+    .filters-bar button {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    /* --- Tables --- */
+    .table-wrapper {
+        margin: 0 -16px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 12px 14px;
+        font-size: 0.8rem;
+    }
+
+    /* --- Login card --- */
+    .login-card {
+        padding: 32px 24px;
+        border-radius: 16px;
+    }
+
+    .logo {
+        font-size: 1.5rem;
+        justify-content: center;
+    }
+
+    /* --- Modals --- */
+    .profile-modal {
+        padding: 24px 16px !important;
+        border-radius: 20px !important;
+        width: 95vw !important;
+        margin: 10px !important;
+    }
+
+    /* Profile modal inner grid → stack on mobile */
+    .profile-modal .inner-tabs {
+        gap: 16px;
+    }
+
+    /* --- Inner tabs scrollable --- */
+    .inner-tabs {
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    /* --- Bottom Nav --- */
+    #mobile-bottom-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        background: rgba(10, 25, 47, 0.95);
+        backdrop-filter: blur(15px);
+        padding: 8px 0;
+    }
+
+    .bottom-nav-grid {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    /* --- Grid System Overrides --- */
+    [style*="display: grid"] {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    /* Allow 2-column for small stats */
+    .kpi-grid,
+    [style*="grid-template-columns: repeat(2, 1fr)"],
+    [style*="grid-template-columns: 1fr 1fr"] {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* --- Module Neutral Overrides --- */
+    /* Force all filter bars following the standard pattern to stack */
+    .filters-bar[style*="display: flex"],
+    [style*="margin-top: 20px"][style*="display: flex"] {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 15px !important;
+        gap: 12px !important;
+    }
+
+    /* --- Reports Specific --- */
+    .report-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 15px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .report-header .button-group {
+        width: 100% !important;
+        flex-direction: row !important;
+        /* Keep buttons side-by-side but allow wrapping */
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+
+    .report-header .button-group .login-btn {
+        flex: 1 !important;
+        min-width: 140px !important;
+        margin: 0 !important;
+    }
+
+    /* Force all 2, 3, or 4 column grids used in sub-templates to stack */
+    .slide-up[style*="display: grid"],
+    [style*="display: grid"][style*="grid-template-columns: 1fr 1fr"],
+    [style*="display: grid"][style*="grid-template-columns: 1fr 1.5fr"],
+    [style*="display: grid"][style*="grid-template-columns: 1.5fr 1fr"],
+    [style*="display: grid"][style*="grid-template-columns: 1fr 1fr 1fr"],
+    [style*="display: grid"][style*="grid-template-columns: repeat(3, 1fr)"],
+    [style*="display: grid"][style*="grid-template-columns: repeat(4, 1fr)"],
+    [style*="display: grid"][style*="grid-template-columns: 2fr 1fr"],
+    [style*="grid-template-columns: 280px 1fr"],
+    [style*="grid-template-columns: 260px 1fr"],
+    [style*="grid-template-columns: 240px 1fr"],
+    .kpi-grid {
+        grid-template-columns: 1fr !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* --- HRMS Specific --- */
+    /* Inner Tabs navigation (Directory, Leave, Payroll) */
+    [style*="display: flex"][style*="gap: 8px"][style*="margin-top: 25px"] {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+    }
+
+    [style*="display: flex"][style*="gap: 8px"][style*="margin-top: 25px"] .login-btn {
+        flex: 1 1 140px !important;
+        margin: 0 !important;
+    }
+
+    /* Sub-header boxes (Directory Search, Leave Headers) */
+    [style*="display: flex"][style*="justify-content: space-between"][style*="align-items: center"] {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 15px !important;
+    }
+
+    [style*="display: flex"][style*="justify-content: space-between"][style*="align-items: center"] div[style*="display: flex"] {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    [style*="display: flex"][style*="justify-content: space-between"][style*="align-items: center"] input,
+    [style*="display: flex"][style*="justify-content: space-between"][style*="align-items: center"] select {
+        width: 100% !important;
+    }
+
+    /* Large padding sections (HRMS Container, Payroll) */
+    [style*="padding: 30px"],
+    [style*="padding: 40px"],
+    [style*="padding: 35px"] {
+        padding: 20px !important;
+    }
+
+    /* Funnel View Overrides */
+    [style*="FUNNEL VIEW"]+[style*="display: flex"] {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    [style*="FUNNEL VIEW"]+[style*="display: flex"]>div {
+        flex: none !important;
+        width: 100% !important;
+        border-radius: 8px !important;
+        padding: 12px 20px !important;
+    }
+
+    /* Status Filter Tabs (SIS) */
+    [style*="display: flex"][style*="gap: 8px"][style*="margin-top: 22px"] {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        justify-content: center !important;
+        padding: 0 10px;
+    }
+
+    /* Force 2-col kpi grids for all modules */
+    [style*="grid-template-columns: repeat(6, 1fr)"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+}
+
+/* =============================================================
+   SMALL MOBILE  (≤ 420px)
+   ============================================================= */
+@media (max-width: 420px) {
+    .kpi-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .kpi-val {
+        font-size: 1.2rem;
+    }
+
+    .profile-modal {
+        padding: 18px 14px !important;
+    }
+
+    /* 3-col → 2-col on very small */
+    [style*="grid-template-columns: repeat(3, 1fr)"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* 6-col shortcut → 2-col on very small */
+    [style*="grid-template-columns: repeat(6, 1fr)"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}

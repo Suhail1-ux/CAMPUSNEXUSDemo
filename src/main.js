@@ -1,4 +1,5 @@
 import './style.css';
+import './responsive.css';
 import { sidebarTemplates } from './data/mockData.js';
 import { viewTemplates } from './data/templates.js';
 import { profileTabTemplates, financeSectionTemplates, hrmsSectionTemplates, reportSectionTemplates, settingSectionTemplates } from './data/subTemplates.js';
@@ -522,16 +523,18 @@ class CampusNexusApp {
                     </div>
 
                     <!-- Exam Schedule -->
-                    <table class="data-table" style="font-size:0.72rem;margin-bottom:20px;">
-                        <thead><tr><th>Date</th><th>Day</th><th>Course</th><th>Time</th><th>Hall</th></tr></thead>
-                        <tbody>
-                            <tr><td>May 10, 2026</td><td>Monday</td><td>Design & Analysis of Algorithms</td><td>10:00 – 13:00</td><td>Hall-A (NL-402)</td></tr>
-                            <tr><td>May 13, 2026</td><td>Thursday</td><td>Machine Learning</td><td>10:00 – 13:00</td><td>Lab-ML-1</td></tr>
-                            <tr><td>May 16, 2026</td><td>Sunday</td><td>Computer Networks</td><td>10:00 – 13:00</td><td>Hall-B (NL-204)</td></tr>
-                            <tr><td>May 19, 2026</td><td>Wednesday</td><td>Software Engineering</td><td>14:00 – 17:00</td><td>Hall-A (NL-402)</td></tr>
-                            <tr><td>May 22, 2026</td><td>Saturday</td><td>Database Systems</td><td>10:00 – 13:00</td><td>Lab-DB</td></tr>
-                        </tbody>
-                    </table>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table" style="font-size:0.72rem;margin-bottom:20px;">
+                            <thead><tr><th>Date</th><th>Day</th><th>Course</th><th>Time</th><th>Hall</th></tr></thead>
+                            <tbody>
+                                <tr><td>May 10, 2026</td><td>Monday</td><td>Design & Analysis of Algorithms</td><td>10:00 \u2013 13:00</td><td>Hall-A (NL-402)</td></tr>
+                                <tr><td>May 13, 2026</td><td>Thursday</td><td>Machine Learning</td><td>10:00 \u2013 13:00</td><td>Lab-ML-1</td></tr>
+                                <tr><td>May 16, 2026</td><td>Sunday</td><td>Computer Networks</td><td>10:00 \u2013 13:00</td><td>Hall-B (NL-204)</td></tr>
+                                <tr><td>May 19, 2026</td><td>Wednesday</td><td>Software Engineering</td><td>14:00 \u2013 17:00</td><td>Hall-A (NL-402)</td></tr>
+                                <tr><td>May 22, 2026</td><td>Saturday</td><td>Database Systems</td><td>10:00 \u2013 13:00</td><td>Lab-DB</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <div style="display:flex;gap:10px;border-top:1px dashed rgba(184,134,11,0.3);padding-top:20px;">
                         <button class="login-btn action-trigger" data-action="export_pdf" style="flex:1;font-size:0.7rem;background:var(--gold);color:var(--navy-dark);">⏬ DOWNLOAD_PDF</button>

@@ -874,14 +874,16 @@ export const viewTemplates = {
             
             <div style="background: var(--glass); padding: 25px; border-radius: 16px; border: 1px solid var(--glass-border);">
                 <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--gold); margin-bottom: 20px;">Student Performance Ledger</h3>
-                <table class="data-table" style="font-size: 0.7rem;">
-                    <thead><tr><th>Scholar</th><th>SGPA</th><th>CGPA</th><th>Status</th></tr></thead>
-                    <tbody>
-                        <tr><td>Aarav M.</td><td>9.50</td><td>9.42</td><td><span class="status-pill status-verified">PASS</span></td></tr>
-                        <tr><td>Isha K.</td><td>8.80</td><td>8.75</td><td><span class="status-pill status-verified">PASS</span></td></tr>
-                        <tr><td>Zaid A.</td><td>9.20</td><td>9.15</td><td><span class="status-pill status-verified">PASS</span></td></tr>
-                    </tbody>
-                </table>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" style="font-size: 0.7rem;">
+                        <thead><tr><th>Scholar</th><th>SGPA</th><th>CGPA</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td>Aarav M.</td><td>9.50</td><td>9.42</td><td><span class="status-pill status-verified">PASS</span></td></tr>
+                            <tr><td>Isha K.</td><td>8.80</td><td>8.75</td><td><span class="status-pill status-verified">PASS</span></td></tr>
+                            <tr><td>Zaid A.</td><td>9.20</td><td>9.15</td><td><span class="status-pill status-verified">PASS</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     `,
@@ -923,14 +925,16 @@ export const viewTemplates = {
 
             <div style="background: var(--glass); border-radius: 16px; border: 1px solid var(--glass-border); overflow: hidden;">
                 <h3 style="padding: 25px 25px 15px 25px; font-size: 0.9rem; font-weight: 700; color: var(--gold);">Recent Fiscal Transactions</h3>
-                <table class="data-table" style="font-size: 0.75rem; border: none; border-radius: 0;">
-                    <thead><tr><th>TxID</th><th>Scholar</th><th>Head</th><th>Amount</th><th>Status</th></tr></thead>
-                    <tbody>
-                        <tr><td>#FT-8812</td><td>Aarav M.</td><td>Tuition</td><td>$4,500</td><td><span class="status-pill status-verified">SUCCESS</span></td></tr>
-                        <tr><td>#FT-8813</td><td>Isha K.</td><td>Hostel</td><td>$1,200</td><td><span class="status-pill status-verified">SUCCESS</span></td></tr>
-                        <tr><td>#FT-8814</td><td>Zaid A.</td><td>Tuition</td><td>$4,500</td><td><span class="status-pill status-pending">PENDING</span></td></tr>
-                    </tbody>
-                </table>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" style="font-size: 0.75rem; border: none; border-radius: 0;">
+                        <thead><tr><th>TxID</th><th>Scholar</th><th>Head</th><th>Amount</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td>#FT-8812</td><td>Aarav M.</td><td>Tuition</td><td>$4,500</td><td><span class="status-pill status-verified">SUCCESS</span></td></tr>
+                            <tr><td>#FT-8813</td><td>Isha K.</td><td>Hostel</td><td>$1,200</td><td><span class="status-pill status-verified">SUCCESS</span></td></tr>
+                            <tr><td>#FT-8814</td><td>Zaid A.</td><td>Tuition</td><td>$4,500</td><td><span class="status-pill status-pending">PENDING</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     `,
@@ -952,14 +956,16 @@ export const viewTemplates = {
         <div class="slide-up" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px;">
             <div style="background: var(--glass); padding: 25px; border-radius: 16px; border: 1px solid var(--glass-border);">
                 <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--gold); margin-bottom: 20px;">Detailed Expenditure Ledger</h3>
-                <table class="data-table" style="font-size: 0.75rem;">
-                    <thead><tr><th>Date</th><th>Category</th><th>Beneficiary</th><th>Amount</th><th>Status</th></tr></thead>
-                    <tbody>
-                        <tr><td>Feb 18, 2026</td><td>Faculty Payroll</td><td>Global Disbursement</td><td>$840,000</td><td><span class="status-pill status-verified">PAID</span></td></tr>
-                        <tr><td>Feb 17, 2026</td><td>Infrastructure</td><td>Cloud Services Node</td><td>$12,400</td><td><span class="status-pill status-verified">PAID</span></td></tr>
-                        <tr><td>Feb 15, 2026</td><td>Marketing</td><td>Admissions Campaign</td><td>$45,000</td><td><span class="status-pill status-pending">IN_RECON</span></td></tr>
-                    </tbody>
-                </table>
+                <div style="overflow-x: auto;">
+                    <table class="data-table" style="font-size: 0.75rem;">
+                        <thead><tr><th>Date</th><th>Category</th><th>Beneficiary</th><th>Amount</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td>Feb 18, 2026</td><td>Faculty Payroll</td><td>Global Disbursement</td><td>$840,000</td><td><span class="status-pill status-verified">PAID</span></td></tr>
+                            <tr><td>Feb 17, 2026</td><td>Infrastructure</td><td>Cloud Services Node</td><td>$12,400</td><td><span class="status-pill status-verified">PAID</span></td></tr>
+                            <tr><td>Feb 15, 2026</td><td>Marketing</td><td>Admissions Campaign</td><td>$45,000</td><td><span class="status-pill status-pending">IN_RECON</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             
             <div style="background: var(--glass); padding: 25px; border-radius: 16px; border: 1px solid var(--glass-border);">
@@ -1147,17 +1153,19 @@ export const viewTemplates = {
             <div style="padding: 18px 22px; border-bottom: 1px solid var(--glass-border);">
                 <h3 style="font-size: 0.9rem; font-weight: 700; color: var(--gold);">Today's Attendance Register — CS-6A</h3>
             </div>
-            <table class="data-table" style="font-size: 0.75rem;">
-                <thead>
-                    <tr><th>Scholar ID</th><th>Name</th><th>Overall %</th><th>Status</th><th>Mark Today</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>#CN-9822</td><td>Aarav Malhotra</td><td style="color:#64ffda;font-weight:800;">98.5%</td><td><span class="status-pill status-verified">PRESENT</span></td><td><button class="login-btn" style="padding:4px 12px;font-size:0.6rem;width:auto;">MOD</button></td></tr>
-                    <tr><td>#CN-9823</td><td>Isha Kapur</td><td style="color:#ffab00;font-weight:800;">82.1%</td><td><span class="status-pill status-pending">UNMARKED</span></td><td><button class="login-btn action-trigger" data-action="mark_all_present" style="padding:4px 12px;font-size:0.6rem;width:auto;">MARK_P</button></td></tr>
-                    <tr><td>#CN-9824</td><td>Riya Sharma</td><td style="color:var(--gold);font-weight:800;">91.3%</td><td><span class="status-pill status-verified">PRESENT</span></td><td><button class="login-btn" style="padding:4px 12px;font-size:0.6rem;width:auto;">MOD</button></td></tr>
-                    <tr><td>#CN-9825</td><td>Kabir Mehta</td><td style="color:#ff4d4d;font-weight:800;">71.4%</td><td><span class="status-pill" style="background:rgba(255,77,77,0.1);color:#ff4d4d;border-color:#ff4d4d;">ABSENT</span></td><td><button class="login-btn" style="padding:4px 12px;font-size:0.6rem;width:auto;opacity:0.5;">ABSENT</button></td></tr>
-                </tbody>
-            </table>
+            <div style="overflow-x: auto;">
+                <table class="data-table" style="font-size: 0.75rem;">
+                    <thead>
+                        <tr><th>Scholar ID</th><th>Name</th><th>Overall %</th><th>Status</th><th>Mark Today</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>#CN-9822</td><td>Aarav Malhotra</td><td style="color:#64ffda;font-weight:800;">98.5%</td><td><span class="status-pill status-verified">PRESENT</span></td><td><button class="login-btn" style="padding:4px 12px;font-size:0.6rem;width:auto;">MOD</button></td></tr>
+                        <tr><td>#CN-9823</td><td>Isha Kapur</td><td style="color:#ffab00;font-weight:800;">82.1%</td><td><span class="status-pill status-pending">UNMARKED</span></td><td><button class="login-btn action-trigger" data-action="mark_all_present" style="padding:4px 12px;font-size:0.6rem;width:auto;">MARK_P</button></td></tr>
+                        <tr><td>#CN-9824</td><td>Riya Sharma</td><td style="color:var(--gold);font-weight:800;">91.3%</td><td><span class="status-pill status-verified">PRESENT</span></td><td><button class="login-btn" style="padding:4px 12px;font-size:0.6rem;width:auto;">MOD</button></td></tr>
+                        <tr><td>#CN-9825</td><td>Kabir Mehta</td><td style="color:#ff4d4d;font-weight:800;">71.4%</td><td><span class="status-pill" style="background:rgba(255,77,77,0.1);color:#ff4d4d;border-color:#ff4d4d;">ABSENT</span></td><td><button class="login-btn" style="padding:4px 12px;font-size:0.6rem;width:auto;opacity:0.5;">ABSENT</button></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Shortage / Defaulters List -->
@@ -1166,14 +1174,16 @@ export const viewTemplates = {
                 <h3 style="font-size: 0.9rem; font-weight: 700; color: #ff4d4d;">⚠️ Defaulters List — Below 75% Attendance</h3>
                 <button class="login-btn action-trigger" data-action="export_excel" style="width:auto;padding:6px 14px;font-size:0.65rem;">⏬ EXPORT_SHORTAGE</button>
             </div>
-            <table class="data-table" style="font-size: 0.75rem;">
-                <thead><tr><th>Scholar ID</th><th>Name</th><th>Program</th><th>Attendance %</th><th>Classes Attended</th><th>Total Classes</th><th>Notice</th></tr></thead>
-                <tbody>
-                    <tr><td>#CN-9825</td><td>Kabir Mehta</td><td>B.Tech CS</td><td style="color:#ff4d4d;font-weight:800;">71.4%</td><td>100</td><td>140</td><td><button class="login-btn action-trigger" data-action="send_notice" style="padding:4px 10px;font-size:0.6rem;width:auto;background:rgba(255,77,77,0.1);color:#ff4d4d;border-color:rgba(255,77,77,0.3);">SEND_NOTICE</button></td></tr>
-                    <tr><td>#CN-9830</td><td>Anika Rao</td><td>MBA Finance</td><td style="color:#ff4d4d;font-weight:800;">68.2%</td><td>52</td><td>76</td><td><button class="login-btn action-trigger" data-action="send_notice" style="padding:4px 10px;font-size:0.6rem;width:auto;background:rgba(255,77,77,0.1);color:#ff4d4d;border-color:rgba(255,77,77,0.3);">SEND_NOTICE</button></td></tr>
-                    <tr><td>#CN-9841</td><td>Farhan Sheikh</td><td>B.Tech CS</td><td style="color:#ff4d4d;font-weight:800;">72.9%</td><td>102</td><td>140</td><td><button class="login-btn action-trigger" data-action="send_notice" style="padding:4px 10px;font-size:0.6rem;width:auto;background:rgba(255,77,77,0.1);color:#ff4d4d;border-color:rgba(255,77,77,0.3);">SEND_NOTICE</button></td></tr>
-                </tbody>
-            </table>
+            <div style="overflow-x: auto;">
+                <table class="data-table" style="font-size: 0.75rem;">
+                    <thead><tr><th>Scholar ID</th><th>Name</th><th>Program</th><th>Attendance %</th><th>Classes Attended</th><th>Total Classes</th><th>Notice</th></tr></thead>
+                    <tbody>
+                        <tr><td>#CN-9825</td><td>Kabir Mehta</td><td>B.Tech CS</td><td style="color:#ff4d4d;font-weight:800;">71.4%</td><td>100</td><td>140</td><td><button class="login-btn action-trigger" data-action="send_notice" style="padding:4px 10px;font-size:0.6rem;width:auto;background:rgba(255,77,77,0.1);color:#ff4d4d;border-color:rgba(255,77,77,0.3);">SEND_NOTICE</button></td></tr>
+                        <tr><td>#CN-9830</td><td>Anika Rao</td><td>MBA Finance</td><td style="color:#ff4d4d;font-weight:800;">68.2%</td><td>52</td><td>76</td><td><button class="login-btn action-trigger" data-action="send_notice" style="padding:4px 10px;font-size:0.6rem;width:auto;background:rgba(255,77,77,0.1);color:#ff4d4d;border-color:rgba(255,77,77,0.3);">SEND_NOTICE</button></td></tr>
+                        <tr><td>#CN-9841</td><td>Farhan Sheikh</td><td>B.Tech CS</td><td style="color:#ff4d4d;font-weight:800;">72.9%</td><td>102</td><td>140</td><td><button class="login-btn action-trigger" data-action="send_notice" style="padding:4px 10px;font-size:0.6rem;width:auto;background:rgba(255,77,77,0.1);color:#ff4d4d;border-color:rgba(255,77,77,0.3);">SEND_NOTICE</button></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     `,
     "Home": () => `
