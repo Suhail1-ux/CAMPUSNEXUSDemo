@@ -76,42 +76,48 @@ export const sidebarTemplates = {
         <button class="nav-item" data-view="Reports"><i>📋</i> Daily Analytics</button>
     `,
     "Exams": `
-        <button class="nav-item active" data-view="Exams"><i>✍️</i> Exam Controller</button>
-        <button class="nav-item" data-view="Reports"><i>📋</i> Result Reports</button>
+        <button class="nav-item active" data-view="Dashboard"><i>📊</i> Exam Dash</button>
+        <button class="nav-item" data-view="Exams"><i>✍️</i> Exam Hub</button>
+        <button class="nav-item" data-view="Reports"><i>📈</i> Result Pulse</button>
     `,
     "Accounts": `
-        <button class="nav-item active" data-view="Fees"><i>💰</i> Fee Control</button>
-        <button class="nav-item" data-view="Finance"><i>📊</i> Collections</button>
+        <button class="nav-item active" data-view="Dashboard"><i>📊</i> Fiscal Overview</button>
+        <button class="nav-item" data-view="Fees"><i>💰</i> Fee Control</button>
+        <button class="nav-item" data-view="Finance"><i>📈</i> Collections</button>
         <button class="nav-item" data-view="Reports"><i>📋</i> Fee Reports</button>
     `,
     "HR": `
-        <button class="nav-item active" data-view="HRMS"><i>👔</i> HR Management</button>
-        <button class="nav-item" data-view="Reports"><i>📋</i> Staff Reports</button>
+        <button class="nav-item active" data-view="Dashboard"><i>📊</i> Human Capital Pulse</button>
+        <button class="nav-item" data-view="Directory"><i>👥</i> Resource Directory</button>
+        <button class="nav-item" data-view="Leave"><i>🏖️</i> Leave Control</button>
+        <button class="nav-item" data-view="Payroll"><i>💳</i> Payroll Hub</button>
+        <button class="nav-item" data-view="Reports"><i>📋</i> HR Reports</button>
     `,
     "Finance": `
-        <button class="nav-item active" data-view="Finance"><i>📈</i> Finance Admin</button>
-        <button class="nav-item" data-view="Reports"><i>📋</i> Ledger Reports</button>
+        <button class="nav-item active" data-view="Dashboard"><i>📊</i> Fiscal Pulse</button>
+        <button class="nav-item" data-view="Ledger"><i>🏛️</i> Sovereign Ledger</button>
+        <button class="nav-item" data-view="Assets"><i>💎</i> Asset Matrix</button>
+        <button class="nav-item" data-view="Reports"><i>📋</i> Finance Analytics</button>
     `,
     "Faculty": `
-        <button class="nav-item active" data-view="Dashboard"><i>🏠</i> My Dashboard</button>
+        <button class="nav-item active" data-view="Dashboard"><i>📊</i> Instructional Hub</button>
         <button class="nav-item" data-view="Academics"><i>📖</i> My Classes</button>
         <button class="nav-item" data-view="Attendance"><i>✅</i> Mark Attendance</button>
-        <button class="nav-item" data-view="Exams"><i>📝</i> Enter Marks</button>
-        <button class="nav-item" data-view="Reports"><i>📋</i> Class Reports</button>
+        <button class="nav-item" data-view="Reports"><i>📉</i> Academic Pulse</button>
     `,
     "Student": `
-        <button class="nav-item active" data-view="Dashboard"><i>🏠</i> My Home</button>
-        <button class="nav-item" data-view="Timetable"><i>📅</i> Timetable</button>
-        <button class="nav-item" data-view="Attendance"><i>✅</i> Attendance</button>
-        <button class="nav-item" data-view="Exams"><i>✍️</i> Results</button>
-        <button class="nav-item" data-view="Fees"><i>💰</i> My Fees</button>
-        <button class="nav-item" data-view="Reports"><i>🔔</i> Notices</button>
+        <button class="nav-item active" data-view="Dashboard"><i>🛡️</i> Sovereign Pulse</button>
+        <button class="nav-item" data-view="Timetable"><i>📅</i> Schedule Node</button>
+        <button class="nav-item" data-view="Attendance"><i>📊</i> Presence Ledger</button>
+        <button class="nav-item" data-view="Exams"><i>📖</i> Evaluation Hub</button>
+        <button class="nav-item" data-view="Fees"><i>💳</i> Fiscal Portal</button>
+        <button class="nav-item" data-view="Reports"><i>📢</i> Notices</button>
     `,
     "Parent": `
-        <button class="nav-item active" data-view="Dashboard"><i>🏠</i> Ward Overview</button>
-        <button class="nav-item" data-view="Attendance"><i>✅</i> Attendance</button>
-        <button class="nav-item" data-view="Exams"><i>✍️</i> Academics</button>
-        <button class="nav-item" data-view="Fees"><i>💰</i> Fee Portal</button>
-        <button class="nav-item" data-view="Reports"><i>🔔</i> Notices</button>
+        <button class="nav-item active" data-view="Dashboard"><i>🛡️</i> Guardian Hub</button>
+        <button class="nav-item" data-view="Attendance"><i>📊</i> Ward Attendance</button>
+        <button class="nav-item" data-view="Exams"><i>📖</i> Academic Ledger</button>
+        <button class="nav-item" data-view="Fees"><i>💳</i> Fee Portal</button>
+        <button class="nav-item" data-view="Reports"><i>📢</i> Broadcasts</button>
     `
 };

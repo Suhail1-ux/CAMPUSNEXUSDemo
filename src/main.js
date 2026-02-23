@@ -5,6 +5,11 @@ import { viewTemplates } from './data/templates.js';
 import { studentViewTemplates } from './data/studentTemplates.js';
 import { parentViewTemplates } from './data/parentTemplates.js';
 import { admissionsViewTemplates } from './data/admissionsTemplates.js';
+import { examViewTemplates } from './data/examTemplates.js';
+import { accountViewTemplates } from './data/accountTemplates.js';
+import { hrViewTemplates } from './data/hrTemplates.js';
+import { financeViewTemplates } from './data/financeTemplates.js';
+import { facultyViewTemplates } from './data/facultyTemplates.js';
 import { profileTabTemplates, financeSectionTemplates, hrmsSectionTemplates, reportSectionTemplates, settingSectionTemplates } from './data/subTemplates.js';
 
 class CampusNexusApp {
@@ -177,6 +182,16 @@ class CampusNexusApp {
             templates = parentViewTemplates;
         } else if (this.userRole === 'Admissions') {
             templates = admissionsViewTemplates;
+        } else if (this.userRole === 'Exams') {
+            templates = examViewTemplates;
+        } else if (this.userRole === 'Accounts') {
+            templates = accountViewTemplates;
+        } else if (this.userRole === 'HR') {
+            templates = hrViewTemplates;
+        } else if (this.userRole === 'Finance') {
+            templates = financeViewTemplates;
+        } else if (this.userRole === 'Faculty') {
+            templates = facultyViewTemplates;
         } else {
             templates = viewTemplates;
         }
@@ -344,7 +359,16 @@ class CampusNexusApp {
             ],
             'parent_connect': [
                 { msg: 'ESTABLISHING_MOBILE_GATEWAY...', type: 'success', delay: 0 },
-                { msg: 'SECURE_LINK_SENT_TO_REGISTERED_NODE', type: 'success', delay: 1000 }
+                { msg: 'SECURE_CHANNEL_READY: Message sent to Mentor', type: 'success', delay: 1000 }
+            ],
+            'pay_fees': [
+                { msg: 'REDIRECTING_TO_SECURE_GATEWAY...', type: 'warning', delay: 0 },
+                { msg: 'AUTHORIZING_NET_BANKING_NODE...', type: 'success', delay: 1500 },
+                { msg: 'PAYMENT_SUCCESS: Transaction #PX-0444 committed', type: 'success', delay: 3000 }
+            ],
+            'rsvp': [
+                { msg: 'PROCESSING_NEXUS_RSVP...', type: 'success', delay: 0 },
+                { msg: 'SLOT_SECURED: Admission code sent to ward mobile', type: 'success', delay: 1200 }
             ],
             'reset_key': [
                 { msg: 'SECURITY_PROTOCOL_OVERRIDE_INIT...', type: 'warning', delay: 0 },
@@ -458,6 +482,23 @@ class CampusNexusApp {
                 { msg: 'GENERATING_COMPLIANCE_AUDIT_REPORT...', type: 'warning', delay: 0 },
                 { msg: 'SCANNING_REGULATORY_REGISTRY...', type: 'success', delay: 1500 },
                 { msg: 'COMPLIANCE_AUDIT_COMPLETE: Report ready', type: 'success', delay: 3000 }
+            ],
+            'view_ledger': [
+                { msg: 'FETCHING_STUDENT_FISCAL_LEDGER...', type: 'success', delay: 0 },
+                { msg: 'LEDGER_SYNCHRONIZED_WITH_CORE_NODE', type: 'success', delay: 1500 }
+            ],
+            'trigger_reminders': [
+                { msg: 'COMPILING_DEFAULTER_LIST...', type: 'warning', delay: 0 },
+                { msg: 'NOTICES_DISPATCHED_VIA_SMS_EMAIL_NODE', type: 'success', delay: 2000 }
+            ],
+            'halt_admit_cards': [
+                { msg: 'APPLYING_FISCAL_BLOCK_ON_EXAM_NODE...', type: 'warning', delay: 0 },
+                { msg: 'ADMIT_CARDS_HALTED_FOR_TARGET_DEBTORS', type: 'success', delay: 1500 }
+            ],
+            'reconcile_selected': [
+                { msg: 'INITIALIZING_BULK_RECONCILIATION...', type: 'warning', delay: 0 },
+                { msg: 'SYNCING_TRANSACTION_NODES...', type: 'success', delay: 1800 },
+                { msg: 'BULK_RECONCILIATION_COMPLETE', type: 'success', delay: 3500 }
             ]
         };
 
@@ -490,7 +531,8 @@ class CampusNexusApp {
             'export_csv': 'CampusNexus_Data.csv',
             'export_balance_sheet': 'Finance_Summary.pdf',
             'export_payroll': 'Payroll_Register.xlsx',
-            'export_catalog': 'Academic_Catalog.xlsx'
+            'export_catalog': 'Academic_Catalog.xlsx',
+            'export_master_ledger': 'Finance_Master_Ledger.xlsx'
         };
         const filename = labels[action] || 'CampusNexus_Export.pdf';
         const csv = 'ID,Name,Amount,Status\n#001,Sample Record,1000,Active\n#002,Demo Entry,2500,Paid\n#003,Test Node,800,Pending';
@@ -508,61 +550,58 @@ class CampusNexusApp {
         const modal = document.getElementById('modal-container');
         if (!modal) return;
         modal.innerHTML = `
-            <div class="modal-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);z-index:10000;display:flex;align-items:center;justify-content:center;">
-                    <div class="slide-up" style="background:var(--navy-dark);border:1px solid var(--gold);border-radius:20px;width:580px;max-width:95vw;padding:20px 30px;position:relative;">
-                        <button class="close-hub" style="position:absolute;top:12px;right:18px;background:none;border:none;color:var(--white);font-size:1.1rem;cursor:pointer;">×</button>
+            <div class="modal-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:10000;display:flex;align-items:flex-start;justify-content:center;padding-top:20px;">
+                <div class="slide-up" style="background:var(--navy-dark);border:1px solid var(--gold);border-radius:6px;width:440px;max-width:98vw;padding:4px 8px;position:relative;box-shadow:0 0 30px rgba(0,0,0,0.8);">
+                    <button class="close-hub" style="position:absolute;top:2px;right:4px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:0.7rem;cursor:pointer;z-index:10;">×</button>
 
-                        <!-- Hall Ticket Header -->
-                        <div style="text-align:center;border-bottom:2px dashed rgba(184,134,11,0.4);padding-bottom:10px;margin-bottom:15px;">
-                            <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px;">
-                                <div style="width:40px;height:40px;background:var(--navy-dark);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display';font-weight:900;font-size:0.8rem;color:white;">C<span style="color:var(--gold);">N</span></div>
-                                <div style="text-align:left;">
-                                    <p style="font-size:0.85rem;font-weight:900;color:var(--white);">CampusNexus Sovereign Institute</p>
-                                    <p style="font-size:0.55rem;color:var(--gold);letter-spacing:1px;">EXAMINATION HALL TICKET — 2026</p>
-                                </div>
-                            </div>
-                            <span class="status-pill status-verified" style="font-size:0.6rem;padding:2px 8px;">ADMIT CARD VERIFIED</span>
-                        </div>
-
-                        <!-- Student Info -->
-                        <div style="display:grid;grid-template-columns:1fr auto;gap:12px;margin-bottom:15px;">
-                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                                <div><p style="font-size:0.5rem;color:var(--slate);">STUDENT NAME</p><p style="font-weight:700;font-size:0.7rem;">Aarav Malhotra</p></div>
-                                <div><p style="font-size:0.5rem;color:var(--slate);">ROLL NUMBER</p><p style="font-weight:700;font-size:0.7rem;color:var(--gold);">CS2021-9822</p></div>
-                                <div><p style="font-size:0.5rem;color:var(--slate);">PROGRAM</p><p style="font-weight:700;font-size:0.7rem;">B.Tech CS</p></div>
-                                <div><p style="font-size:0.5rem;color:var(--slate);">SEMESTER</p><p style="font-weight:700;font-size:0.7rem;">VI (2026)</p></div>
-                                <div><p style="font-size:0.5rem;color:var(--slate);">CAMPUS</p><p style="font-weight:700;font-size:0.7rem;">Main Campus</p></div>
-                                <div><p style="font-size:0.5rem;color:var(--slate);">SECTION</p><p style="font-weight:700;font-size:0.7rem;">CS-6A</p></div>
-                            </div>
-                            <div style="width:65px;height:75px;background:var(--glass);border:1px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
-                        </div>
-
-                        <!-- Exam Schedule -->
-                        <div style="overflow-x: auto;">
-                            <table class="data-table" style="font-size:0.65rem;margin-bottom:12px;">
-                                <style>
-                                    .data-table td, .data-table th { padding: 8px 10px !important; }
-                                </style>
-                                <thead><tr><th>Date</th><th>Day</th><th>Course</th><th>Time</th><th>Hall</th></tr></thead>
-                                <tbody>
-                                    <tr><td>May 10, 2026</td><td>Mon</td><td>Design & Analysis of Algorithms</td><td>10:00 – 13:00</td><td>NL-402</td></tr>
-                                    <tr><td>May 13, 2026</td><td>Thu</td><td>Machine Learning</td><td>10:00 – 13:00</td><td>Lab-ML-1</td></tr>
-                                    <tr><td>May 16, 2026</td><td>Sun</td><td>Computer Networks</td><td>10:00 – 13:00</td><td>NL-204</td></tr>
-                                    <tr><td>May 19, 2026</td><td>Wed</td><td>Software Engineering</td><td>14:00 – 17:00</td><td>NL-402</td></tr>
-                                    <tr><td>May 22, 2026</td><td>Sat</td><td>Database Systems</td><td>10:00 – 13:00</td><td>Lab-DB</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div style="display:flex;gap:10px;border-top:1px dashed rgba(184,134,11,0.3);padding-top:12px;margin-top:0px;">
-                            <button class="login-btn action-trigger" data-action="export_pdf" style="flex:1;font-size:0.6rem;background:var(--gold);color:var(--navy-dark);padding:8px;">⏬ DOWNLOAD_PDF</button>
-                            <button class="login-btn close-hub" style="flex:1;font-size:0.6rem;padding:8px;">CLOSE</button>
-                        </div>
-                        <p style="font-size:0.45rem;color:var(--slate);text-align:center;margin-top:6px;">This hall ticket must be presented along with a valid photo ID. Generated: Feb 20, 2026.</p>
+                    <!-- Row 1: Flat Header -->
+                    <div style="display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(100,255,218,0.1);padding-bottom:2px;margin-bottom:3px;">
+                        <span style="font-family:'Playfair Display';font-weight:900;font-size:0.5rem;color:var(--gold);">CN</span>
+                        <h2 style="font-size:0.55rem;font-weight:900;color:var(--white);margin:0;letter-spacing:0.5px;text-transform:uppercase;">Hall Ticket 2026</h2>
+                        <span style="margin-left:auto;font-size:0.38rem;padding:0px 3px;border:1px solid #64ffda;color:#64ffda;border-radius:1px;font-weight:800;">VERIFIED_NODE</span>
                     </div>
+
+                    <!-- Row 2: Dense Info -->
+                    <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.02);padding:2px 4px;border-radius:2px;margin-bottom:3px;font-size:0.45rem;">
+                        <div style="display:flex;gap:6px;">
+                            <span style="color:var(--slate);">NAME: <b style="color:var(--white);">AARAV MALHOTRA</b></span>
+                            <span style="color:var(--slate);">ROLL: <b style="color:var(--white);">#9822-X</b></span>
+                        </div>
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aarav" style="width:16px;height:16px;border-radius:2px;border:1px solid var(--gold);">
+                    </div>
+
+                    <!-- Row 3: Micro Schedule Table -->
+                    <table style="width:100%;border-collapse:collapse;font-size:0.42rem;color:var(--white);line-height:1;">
+                        <thead style="background:rgba(100,255,218,0.05);">
+                            <tr>
+                                <th style="text-align:left;padding:2px 4px;color:var(--gold);border:1px solid rgba(100,255,218,0.1);">SUBJECT_CODE</th>
+                                <th style="text-align:left;padding:2px 4px;color:var(--gold);border:1px solid rgba(100,255,218,0.1);">DATE/TIME</th>
+                                <th style="text-align:left;padding:2px 4px;color:var(--gold);border:1px solid rgba(100,255,218,0.1);">LOCATION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding:2px 4px;border:1px solid rgba(100,255,218,0.1);">CS-601 (Algo)</td>
+                                <td style="padding:2px 4px;border:1px solid rgba(100,255,218,0.1);">MAR 12 | 09:00 AM</td>
+                                <td style="padding:2px 4px;border:1px solid rgba(100,255,218,0.1);">HALL-A (NL-402)</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:2px 4px;border:1px solid rgba(100,255,218,0.1);">MAR 15 | 02:00 PM</td>
+                                <td style="padding:2px 4px;border:1px solid rgba(100,255,218,0.1);">LAB-DB (SL-08)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Row 4: Action Strip -->
+                    <div style="display:flex;gap:4px;margin-top:3px;padding-top:3px;border-top:1px solid rgba(100,255,218,0.05);">
+                        <button class="login-btn action-trigger" data-action="download_id" style="flex:1;height:18px;font-size:0.45rem;background:var(--gold);color:var(--navy-dark);border:none;border-radius:2px;font-weight:900;cursor:pointer;">PRINT_ADMIT_CARD</button>
+                        <button class="login-btn" style="width:40px;height:18px;font-size:0.45rem;background:rgba(255,255,255,0.05);color:var(--slate);border:1px solid var(--glass-border);border-radius:2px;cursor:pointer;">CLOSE</button>
+                    </div>
+                </div>
             </div>
         `;
-        modal.querySelectorAll('.close-hub').forEach(b => b.onclick = () => modal.innerHTML = '');
+        modal.querySelector('.close-hub').onclick = () => modal.innerHTML = '';
+        modal.querySelector('.login-btn:not(.action-trigger)').onclick = () => modal.innerHTML = '';
         modal.querySelectorAll('.action-trigger').forEach(b => b.onclick = (e) => this.executeActionSequence(e.currentTarget.dataset.action));
     }
 
