@@ -71,9 +71,9 @@ export const sidebarTemplates = {
         <button class="nav-item" data-view="Settings"><i>⚙️</i> Settings</button>
     `,
     "Admissions": `
-        <button class="nav-item active" data-view="Dashboard"><i>📊</i> Admin Dashboard</button>
-        <button class="nav-item" data-view="Admissions"><i>🤝</i> Applications</button>
-        <button class="nav-item" data-view="Reports"><i>📋</i> Lead Reports</button>
+        <button class="nav-item active" data-view="Dashboard"><i>📊</i> Intake Performance</button>
+        <button class="nav-item" data-view="Admissions"><i>👥</i> Lead Pipeline</button>
+        <button class="nav-item" data-view="Reports"><i>📋</i> Daily Analytics</button>
     `,
     "Exams": `
         <button class="nav-item active" data-view="Exams"><i>✍️</i> Exam Controller</button>
@@ -105,6 +105,13 @@ export const sidebarTemplates = {
         <button class="nav-item" data-view="Attendance"><i>✅</i> Attendance</button>
         <button class="nav-item" data-view="Exams"><i>✍️</i> Results</button>
         <button class="nav-item" data-view="Fees"><i>💰</i> My Fees</button>
+        <button class="nav-item" data-view="Reports"><i>🔔</i> Notices</button>
+    `,
+    "Parent": `
+        <button class="nav-item active" data-view="Dashboard"><i>🏠</i> Ward Overview</button>
+        <button class="nav-item" data-view="Attendance"><i>✅</i> Attendance</button>
+        <button class="nav-item" data-view="Exams"><i>✍️</i> Academics</button>
+        <button class="nav-item" data-view="Fees"><i>💰</i> Fee Portal</button>
         <button class="nav-item" data-view="Reports"><i>🔔</i> Notices</button>
     `
 };

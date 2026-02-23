@@ -2,6 +2,9 @@ import './style.css';
 import './responsive.css';
 import { sidebarTemplates } from './data/mockData.js';
 import { viewTemplates } from './data/templates.js';
+import { studentViewTemplates } from './data/studentTemplates.js';
+import { parentViewTemplates } from './data/parentTemplates.js';
+import { admissionsViewTemplates } from './data/admissionsTemplates.js';
 import { profileTabTemplates, financeSectionTemplates, hrmsSectionTemplates, reportSectionTemplates, settingSectionTemplates } from './data/subTemplates.js';
 
 class CampusNexusApp {
@@ -69,6 +72,7 @@ class CampusNexusApp {
                             <option value="Finance">Finance Administrator</option>
                             <option value="Faculty">Faculty Member</option>
                             <option value="Student">Student Sovereign</option>
+                            <option value="Parent">Parent / Guardian</option>
                         </select>
                         <input type="password" class="login-input" placeholder="ACCESS_KEY" value="********">
                     </div>
@@ -166,8 +170,19 @@ class CampusNexusApp {
         // Sync with renamed Analytics -> Reports
         const finalViewName = viewName === 'Analytics' ? 'Reports' : viewName;
 
-        if (viewTemplates[finalViewName]) {
-            container.innerHTML = viewTemplates[finalViewName](this.userRole);
+        let templates;
+        if (this.userRole === 'Student') {
+            templates = studentViewTemplates;
+        } else if (this.userRole === 'Parent') {
+            templates = parentViewTemplates;
+        } else if (this.userRole === 'Admissions') {
+            templates = admissionsViewTemplates;
+        } else {
+            templates = viewTemplates;
+        }
+
+        if (templates[finalViewName]) {
+            container.innerHTML = templates[finalViewName](this.userRole);
 
             // Mark sidebar active
             document.querySelectorAll('.nav-item').forEach(item => {
@@ -494,54 +509,57 @@ class CampusNexusApp {
         if (!modal) return;
         modal.innerHTML = `
             <div class="modal-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);z-index:10000;display:flex;align-items:center;justify-content:center;">
-                <div class="slide-up" style="background:var(--navy-dark);border:1px solid var(--gold);border-radius:20px;width:700px;max-width:95vw;padding:40px;position:relative;">
-                    <button class="close-hub" style="position:absolute;top:15px;right:20px;background:none;border:none;color:var(--white);font-size:1.5rem;cursor:pointer;">×</button>
+                    <div class="slide-up" style="background:var(--navy-dark);border:1px solid var(--gold);border-radius:20px;width:580px;max-width:95vw;padding:20px 30px;position:relative;">
+                        <button class="close-hub" style="position:absolute;top:12px;right:18px;background:none;border:none;color:var(--white);font-size:1.1rem;cursor:pointer;">×</button>
 
-                    <!-- Hall Ticket Header -->
-                    <div style="text-align:center;border-bottom:2px dashed rgba(184,134,11,0.4);padding-bottom:25px;margin-bottom:25px;">
-                        <div style="display:flex;align-items:center;justify-content:center;gap:15px;margin-bottom:10px;">
-                            <div style="width:55px;height:55px;background:var(--navy-dark);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display';font-weight:900;font-size:1.1rem;color:white;">C<span style="color:var(--gold);">N</span></div>
-                            <div style="text-align:left;">
-                                <p style="font-size:1rem;font-weight:900;color:var(--white);">CampusNexus Sovereign Institute</p>
-                                <p style="font-size:0.65rem;color:var(--gold);letter-spacing:2px;">EXAMINATION HALL TICKET — 2026</p>
+                        <!-- Hall Ticket Header -->
+                        <div style="text-align:center;border-bottom:2px dashed rgba(184,134,11,0.4);padding-bottom:10px;margin-bottom:15px;">
+                            <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px;">
+                                <div style="width:40px;height:40px;background:var(--navy-dark);border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display';font-weight:900;font-size:0.8rem;color:white;">C<span style="color:var(--gold);">N</span></div>
+                                <div style="text-align:left;">
+                                    <p style="font-size:0.85rem;font-weight:900;color:var(--white);">CampusNexus Sovereign Institute</p>
+                                    <p style="font-size:0.55rem;color:var(--gold);letter-spacing:1px;">EXAMINATION HALL TICKET — 2026</p>
+                                </div>
                             </div>
+                            <span class="status-pill status-verified" style="font-size:0.6rem;padding:2px 8px;">ADMIT CARD VERIFIED</span>
                         </div>
-                        <span class="status-pill status-verified" style="font-size:0.7rem;">ADMIT CARD VERIFIED</span>
-                    </div>
 
-                    <!-- Student Info -->
-                    <div style="display:grid;grid-template-columns:1fr auto;gap:20px;margin-bottom:25px;">
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
-                            <div><p style="font-size:0.6rem;color:var(--slate);">STUDENT NAME</p><p style="font-weight:700;font-size:0.85rem;">Aarav Malhotra</p></div>
-                            <div><p style="font-size:0.6rem;color:var(--slate);">ROLL NUMBER</p><p style="font-weight:700;font-size:0.85rem;color:var(--gold);">CS2021-9822</p></div>
-                            <div><p style="font-size:0.6rem;color:var(--slate);">PROGRAM</p><p style="font-weight:700;font-size:0.85rem;">B.Tech CS</p></div>
-                            <div><p style="font-size:0.6rem;color:var(--slate);">SEMESTER</p><p style="font-weight:700;font-size:0.85rem;">VI (2026)</p></div>
-                            <div><p style="font-size:0.6rem;color:var(--slate);">CAMPUS</p><p style="font-weight:700;font-size:0.85rem;">Main Campus</p></div>
-                            <div><p style="font-size:0.6rem;color:var(--slate);">SECTION</p><p style="font-weight:700;font-size:0.85rem;">CS-6A</p></div>
+                        <!-- Student Info -->
+                        <div style="display:grid;grid-template-columns:1fr auto;gap:12px;margin-bottom:15px;">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                                <div><p style="font-size:0.5rem;color:var(--slate);">STUDENT NAME</p><p style="font-weight:700;font-size:0.7rem;">Aarav Malhotra</p></div>
+                                <div><p style="font-size:0.5rem;color:var(--slate);">ROLL NUMBER</p><p style="font-weight:700;font-size:0.7rem;color:var(--gold);">CS2021-9822</p></div>
+                                <div><p style="font-size:0.5rem;color:var(--slate);">PROGRAM</p><p style="font-weight:700;font-size:0.7rem;">B.Tech CS</p></div>
+                                <div><p style="font-size:0.5rem;color:var(--slate);">SEMESTER</p><p style="font-weight:700;font-size:0.7rem;">VI (2026)</p></div>
+                                <div><p style="font-size:0.5rem;color:var(--slate);">CAMPUS</p><p style="font-weight:700;font-size:0.7rem;">Main Campus</p></div>
+                                <div><p style="font-size:0.5rem;color:var(--slate);">SECTION</p><p style="font-weight:700;font-size:0.7rem;">CS-6A</p></div>
+                            </div>
+                            <div style="width:65px;height:75px;background:var(--glass);border:1px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">👤</div>
                         </div>
-                        <div style="width:90px;height:110px;background:var(--glass);border:1px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;">👤</div>
-                    </div>
 
-                    <!-- Exam Schedule -->
-                    <div style="overflow-x: auto;">
-                        <table class="data-table" style="font-size:0.72rem;margin-bottom:20px;">
-                            <thead><tr><th>Date</th><th>Day</th><th>Course</th><th>Time</th><th>Hall</th></tr></thead>
-                            <tbody>
-                                <tr><td>May 10, 2026</td><td>Monday</td><td>Design & Analysis of Algorithms</td><td>10:00 \u2013 13:00</td><td>Hall-A (NL-402)</td></tr>
-                                <tr><td>May 13, 2026</td><td>Thursday</td><td>Machine Learning</td><td>10:00 \u2013 13:00</td><td>Lab-ML-1</td></tr>
-                                <tr><td>May 16, 2026</td><td>Sunday</td><td>Computer Networks</td><td>10:00 \u2013 13:00</td><td>Hall-B (NL-204)</td></tr>
-                                <tr><td>May 19, 2026</td><td>Wednesday</td><td>Software Engineering</td><td>14:00 \u2013 17:00</td><td>Hall-A (NL-402)</td></tr>
-                                <tr><td>May 22, 2026</td><td>Saturday</td><td>Database Systems</td><td>10:00 \u2013 13:00</td><td>Lab-DB</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        <!-- Exam Schedule -->
+                        <div style="overflow-x: auto;">
+                            <table class="data-table" style="font-size:0.65rem;margin-bottom:12px;">
+                                <style>
+                                    .data-table td, .data-table th { padding: 8px 10px !important; }
+                                </style>
+                                <thead><tr><th>Date</th><th>Day</th><th>Course</th><th>Time</th><th>Hall</th></tr></thead>
+                                <tbody>
+                                    <tr><td>May 10, 2026</td><td>Mon</td><td>Design & Analysis of Algorithms</td><td>10:00 – 13:00</td><td>NL-402</td></tr>
+                                    <tr><td>May 13, 2026</td><td>Thu</td><td>Machine Learning</td><td>10:00 – 13:00</td><td>Lab-ML-1</td></tr>
+                                    <tr><td>May 16, 2026</td><td>Sun</td><td>Computer Networks</td><td>10:00 – 13:00</td><td>NL-204</td></tr>
+                                    <tr><td>May 19, 2026</td><td>Wed</td><td>Software Engineering</td><td>14:00 – 17:00</td><td>NL-402</td></tr>
+                                    <tr><td>May 22, 2026</td><td>Sat</td><td>Database Systems</td><td>10:00 – 13:00</td><td>Lab-DB</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                    <div style="display:flex;gap:10px;border-top:1px dashed rgba(184,134,11,0.3);padding-top:20px;">
-                        <button class="login-btn action-trigger" data-action="export_pdf" style="flex:1;font-size:0.7rem;background:var(--gold);color:var(--navy-dark);">⏬ DOWNLOAD_PDF</button>
-                        <button class="login-btn close-hub" style="flex:1;font-size:0.7rem;">CLOSE</button>
+                        <div style="display:flex;gap:10px;border-top:1px dashed rgba(184,134,11,0.3);padding-top:12px;margin-top:0px;">
+                            <button class="login-btn action-trigger" data-action="export_pdf" style="flex:1;font-size:0.6rem;background:var(--gold);color:var(--navy-dark);padding:8px;">⏬ DOWNLOAD_PDF</button>
+                            <button class="login-btn close-hub" style="flex:1;font-size:0.6rem;padding:8px;">CLOSE</button>
+                        </div>
+                        <p style="font-size:0.45rem;color:var(--slate);text-align:center;margin-top:6px;">This hall ticket must be presented along with a valid photo ID. Generated: Feb 20, 2026.</p>
                     </div>
-                    <p style="font-size:0.55rem;color:var(--slate);text-align:center;margin-top:10px;">This hall ticket must be presented along with a valid photo ID. Generated: Feb 20, 2026.</p>
-                </div>
             </div>
         `;
         modal.querySelectorAll('.close-hub').forEach(b => b.onclick = () => modal.innerHTML = '');
