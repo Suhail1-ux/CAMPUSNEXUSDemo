@@ -65,7 +65,7 @@
         transform: translateX(-100%);
         z-index: 2000;
         /* Above bottom nav */
-        box-shadow: 4px 0 30px rgba(0, 0, 0, 0.6);
+        box-shadow: 4px 0 30px rgba(15, 23, 42, 0.1);
         padding-bottom: 90px;
         /* Clearance for bottom nav and device safely */
     }
@@ -248,8 +248,9 @@
         display: flex;
         align-items: center;
         justify-content: space-around;
-        background: rgba(10, 25, 47, 0.95);
+        background: var(--glass);
         backdrop-filter: blur(15px);
+        border-top: 1px solid var(--glass-border);
         padding: 8px 0;
     }
 

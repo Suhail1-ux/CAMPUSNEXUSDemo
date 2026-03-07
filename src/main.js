@@ -43,7 +43,7 @@ class CampusNexusApp {
                 const change = Math.random() > 0.5 ? 1 : -1;
                 if (Math.random() > 0.8) {
                     kpi.innerText = current + change;
-                    kpi.style.color = change > 0 ? '#64ffda' : '#ff4d4d';
+                    kpi.style.color = change > 0 ? 'var(--gold)' : '#ef4444';
                     setTimeout(() => kpi.style.color = '', 1000);
                 }
             });
@@ -57,6 +57,7 @@ class CampusNexusApp {
         } else {
             this.renderShell();
         }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     renderLogin() {
@@ -67,7 +68,7 @@ class CampusNexusApp {
                     <div class="logo">CAMPUS<span>NEXUS</span></div>
                     <div class="subtitle">Sovereign ERP Intelligence Hub 1.0</div>
                     <div style="margin-bottom: 25px; text-align: left;">
-                        <label style="font-size: 0.6rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 8px; display: block;">SELECT_PERSONA_NODE</label>
+                        <label style="font-size: 0.6rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 8px; display: block;">SELECT_PERSONA</label>
                         <select id="role-select" class="login-input">
                             <option value="Management">Management Viewer (Super)</option>
                             <option value="Admissions">Admissions Officer</option>
@@ -81,7 +82,7 @@ class CampusNexusApp {
                         </select>
                         <input type="password" class="login-input" placeholder="ACCESS_KEY" value="********">
                     </div>
-                    <button id="login-trigger" class="login-btn">INITIALIZE_SESSION</button>
+                    <button id="login-trigger" class="login-btn">LOGIN</button>
                     <div style="margin-top: 25px; font-size: 0.6rem; color: var(--slate); letter-spacing: 1px;">
                         SYSTEM_ID: 0x4421-B | STATUS: OPTIMAL
                     </div>
@@ -101,12 +102,14 @@ class CampusNexusApp {
                 <div id="sidebar-overlay"></div>
 
                 <aside class="sidebar slide-right">
-                    <div class="logo" style="padding: 10px 0; margin-bottom: 15px;">CAMPUS<span>NEXUS</span></div>
+                    <div class="logo" style="padding: 10px 0; margin-bottom: 25px;">CAMPUS<span>NEXUS</span></div>
                     <nav id="nav-container">
                         ${sidebarTemplates[this.userRole] || sidebarTemplates['Management']}
                     </nav>
                     <div style="margin-top: auto; padding-top: 20px;">
-                        <button id="logout-trigger" class="login-btn" style="background: rgba(255,77,77,0.1); color: #ff4d4d; border-color: rgba(255,77,77,0.2); font-size: 0.75rem;">TERMINATE_SESSION</button>
+                        <button id="logout-trigger" class="nav-item" style="background: rgba(239, 68, 68, 0.08) !important; color: #ef4444 !important; border: 1px solid rgba(239, 68, 68, 0.15) !important; font-size: 0.8rem; justify-content: center; font-weight: 700;">
+                            <i data-lucide="log-out" style="width:16px; height:16px;"></i> LOGOUT
+                        </button>
                     </div>
                 </aside>
 
@@ -116,19 +119,19 @@ class CampusNexusApp {
                         <button id="menu-toggle" aria-label="Open menu">☰</button>
 
                         <div class="search-bar">
-                            <i>🔍</i>
-                            <input type="text" id="global-search" placeholder="Search records..." style="background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 0.85rem;">
+                            <i data-lucide="search" style="color: var(--gold);"></i>
+                            <input type="text" id="global-search" placeholder="Search records..." style="background: transparent; border: none; color: var(--white); width: 100%; outline: none; font-size: 0.85rem;">
                         </div>
 
                         <div class="header-actions">
-                            <select id="college-select" style="background: var(--glass); border: 1px solid var(--glass-border); color: var(--gold); padding: 6px 12px; border-radius: 6px; outline: none; font-size: 0.7rem; font-family: Inter, sans-serif;">
+                            <select id="college-select" class="login-input" style="margin:0; width:auto; padding:8px 15px; font-size:0.7rem;">
                                 <option ${this.activeCollege === 'MAIN_CAMPUS' ? 'selected' : ''}>MAIN_CAMPUS</option>
                                 <option ${this.activeCollege === 'CITY_CAMPUS' ? 'selected' : ''}>CITY_CAMPUS</option>
                                 <option ${this.activeCollege === 'NORTH_CAMPUS' ? 'selected' : ''}>NORTH_CAMPUS</option>
                             </select>
                             <div class="profile-chip">
-                                <span style="font-size: 0.6rem; color: var(--gold); letter-spacing: 1px;">${this.userRole.toUpperCase()}_NODE</span>
-                                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--gold), #00fa9a); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink:0;">👤</div>
+                                <span style="font-size: 0.6rem; color: var(--gold); letter-spacing: 1px; font-weight: 700;">${this.userRole.toUpperCase()}</span>
+                                <div style="width: 32px; height: 32px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink:0;"><i data-lucide="user" style="width: 18px; height: 18px; color:white;"></i></div>
                             </div>
                         </div>
                     </header>
@@ -141,19 +144,19 @@ class CampusNexusApp {
             <nav id="mobile-bottom-nav">
                 <div class="bottom-nav-grid">
                     <button class="bottom-nav-item nav-item active" data-view="Dashboard">
-                        <i>📊</i><span>Home</span>
+                        <i data-lucide="layout-dashboard"></i><span>Home</span>
                     </button>
                     <button class="bottom-nav-item nav-item" data-view="SIS">
-                        <i>👥</i><span>Students</span>
+                        <i data-lucide="users"></i><span>Students</span>
                     </button>
                     <button class="bottom-nav-item nav-item" data-view="Admissions">
-                        <i>🤝</i><span>Admit</span>
+                        <i data-lucide="user-plus"></i><span>Admit</span>
                     </button>
                     <button class="bottom-nav-item nav-item" data-view="Fees">
-                        <i>💰</i><span>Fees</span>
+                        <i data-lucide="dollar-sign"></i><span>Fees</span>
                     </button>
                     <button class="bottom-nav-item nav-item" data-view="Reports">
-                        <i>📋</i><span>Reports</span>
+                        <i data-lucide="file-text"></i><span>Reports</span>
                     </button>
                 </div>
             </nav>
@@ -212,9 +215,11 @@ class CampusNexusApp {
             if (finalViewName === 'HRMS') this.renderSubSection('HRMS', 'Directory');
             if (finalViewName === 'Reports') this.renderSubSection('Reports', 'Admissions');
             if (finalViewName === 'Settings') this.renderSubSection('Settings', 'Security');
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         } else {
             console.error(`View not found: ${finalViewName}`);
-            container.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--slate);">Module [${finalViewName}] Node Under Maintenance or Unauthorized.</div>`;
+            container.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--slate);">Module [${finalViewName}] Under Maintenance or Unauthorized.</div>`;
         }
     }
 
@@ -239,6 +244,7 @@ class CampusNexusApp {
                 const isActive = tab.dataset.view === viewName && tab.dataset.sub === subName;
                 tab.classList.toggle('active', isActive);
             });
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
     }
 
@@ -247,13 +253,13 @@ class CampusNexusApp {
         if (!modal) return;
 
         modal.innerHTML = `
-            <div class="modal-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+            <div class="modal-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(10px); z-index: 10000; display: flex; align-items: center; justify-content: center;">
                 <div class="profile-modal slide-up">
                     <button class="close-hub">×</button>
                     <div style="display: flex; gap: 30px; margin-bottom: 30px; align-items: center;">
-                        <div style="width: 100px; height: 100px; border-radius: 20px; background: linear-gradient(135deg, var(--gold), #00fa9a); border: 2px solid rgba(100, 255, 218, 0.3); display: flex; align-items: center; justify-content: center; font-size: 2rem;">👤</div>
+                        <div style="width: 100px; height: 100px; border-radius: 20px; background: linear-gradient(135deg, var(--gold), var(--gold-bright)); border: 2px solid rgba(99, 102, 241, 0.2); display: flex; align-items: center; justify-content: center; font-size: 2rem;"><i data-lucide="user" style="width: 48px; height: 48px; color:white;"></i></div>
                         <div>
-                            <span class="breadcrumb" style="margin: 0; opacity: 0.6;">#SCHOLAR_NODE_${studentId}</span>
+                            <span class="breadcrumb" style="margin: 0; opacity: 0.6;">#SCHOLAR_${studentId}</span>
                             <h2 style="color: var(--white); margin: 5px 0; font-family: 'Playfair Display'; font-size: 2rem;">Aarav Malhotra</h2>
                             <p style="color: var(--gold); font-size: 0.8rem; font-weight: 600; letter-spacing: 1px;">B.Tech Computer Science | Semester 06</p>
                         </div>
@@ -277,8 +283,10 @@ class CampusNexusApp {
                 const sub = tab.dataset.tab;
                 document.getElementById('profile-tab-content').innerHTML = profileTabTemplates[sub] || 'Content Missing';
                 modal.querySelectorAll('.profile-tab-trigger').forEach(t => t.classList.toggle('active', t === tab));
+                if (typeof lucide !== 'undefined') lucide.createIcons();
             };
         });
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     showToast(message, type = 'success') {
@@ -288,18 +296,24 @@ class CampusNexusApp {
         const toast = document.createElement('div');
         toast.className = `toast slide-up ${type}`;
         toast.style.cssText = `
-            background: var(--glass);
-            border-left: 4px solid ${type === 'success' ? '#64ffda' : 'var(--gold)'};
-            color: white;
+            background: var(--navy-dark);
+            border: 1px solid var(--glass-border);
+            border-left: 4px solid ${type === 'success' ? '#10b981' : 'var(--gold)'};
+            color: var(--white);
             padding: 15px 25px;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-top: 10px;
             font-size: 0.8rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-weight: 600;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10001;
         `;
-        toast.innerHTML = `<strong>${type.toUpperCase()}:</strong> ${message}`;
+        toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" style="width:18px; height:18px;"></i> ${message}`;
         container.appendChild(toast);
+        lucide.createIcons();
         setTimeout(() => toast.remove(), 4000);
     }
 
@@ -310,14 +324,14 @@ class CampusNexusApp {
         this.userRole = role;
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('userRole', role);
-        this.showToast(`SESSION_INITIALIZED: ${role}_NODE_CALIBRATED`);
+        this.showToast(`LOGIN_SUCCESSFUL: ${role}_CALIBRATED`);
         this.render();
     }
 
     handleLogout() {
         this.isLoggedIn = false;
         localStorage.removeItem('isLoggedIn');
-        this.showToast('SESSION_TERMINATED', 'warning');
+        this.showToast('SESSION_LOGOUT', 'warning');
         this.render();
     }
 
@@ -349,8 +363,8 @@ class CampusNexusApp {
         const sequences = {
             'download_id': [
                 { msg: 'INITIALIZING_SECURE_EXTRACT...', type: 'success', delay: 0 },
-                { msg: 'ENCRYPTING_ID_NODE_0xCC...', type: 'success', delay: 1500 },
-                { msg: 'DOCUMENT_DISPATCHED_TO_LOCAL_NODE', type: 'success', delay: 3000 }
+                { msg: 'ENCRYPTING_ID_0xCC...', type: 'success', delay: 1500 },
+                { msg: 'DOCUMENT_DISPATCHED', type: 'success', delay: 3000 }
             ],
             'bonafide': [
                 { msg: 'VERIFYING_ACADEMIC_REGISTRY...', type: 'success', delay: 0 },
@@ -363,7 +377,7 @@ class CampusNexusApp {
             ],
             'pay_fees': [
                 { msg: 'REDIRECTING_TO_SECURE_GATEWAY...', type: 'warning', delay: 0 },
-                { msg: 'AUTHORIZING_NET_BANKING_NODE...', type: 'success', delay: 1500 },
+                { msg: 'AUTHORIZING_NET_BANKING...', type: 'success', delay: 1500 },
                 { msg: 'PAYMENT_SUCCESS: Transaction #PX-0444 committed', type: 'success', delay: 3000 }
             ],
             'rsvp': [
@@ -389,13 +403,13 @@ class CampusNexusApp {
                 { msg: 'GENERATING_NEW_CIPHER_KEY...', type: 'warning', delay: 1200 },
                 { msg: 'PASS_ROTATION_COMPLETE: Notify sent to registered mobile', type: 'success', delay: 2800 }
             ],
-            'terminate_session': [
-                { msg: 'BROADCASTING_TERMINATE_SIGNAL...', type: 'warning', delay: 0 },
-                { msg: 'SESSION_NODE_PURGED_SUCCESSFULLY', type: 'success', delay: 1500 }
+            'logout': [
+                { msg: 'BROADCASTING_LOGOUT_SIGNAL...', type: 'warning', delay: 0 },
+                { msg: 'LOGOUT_SUCCESSFUL', type: 'success', delay: 1500 }
             ],
             'commit_branding': [
                 { msg: 'VALIDATING_INSTITUTIONAL_ASSETS...', type: 'success', delay: 0 },
-                { msg: 'SYNCING_BRAND_NODE_TO_CLUSTER...', type: 'success', delay: 1500 },
+                { msg: 'SYNCING_BRAND_ASSETS_TO_CORE...', type: 'success', delay: 1500 },
                 { msg: 'BRANDING_COMMIT_SUCCESSFUL', type: 'success', delay: 3000 }
             ],
             'toggle_setting': [
@@ -411,7 +425,7 @@ class CampusNexusApp {
                 { msg: 'WORKSPACE_CONFIGURATION_SYNCED', type: 'success', delay: 1500 }
             ],
             'upload_logo': [
-                { msg: 'AWAITING_ASSET_NODE_UPLOAD...', type: 'warning', delay: 0 },
+                { msg: 'AWAITING_ASSET_UPLOAD...', type: 'warning', delay: 0 },
                 { msg: 'EMBLEM_SUBMITTED_FOR_APPROVAL', type: 'success', delay: 1000 }
             ],
             'publish_results': [
@@ -421,7 +435,7 @@ class CampusNexusApp {
             ],
             'gen_payslip': [
                 { msg: 'COMPILING_PAYROLL_REGISTER...', type: 'warning', delay: 0 },
-                { msg: 'ENCRYPTING_PAYSLIP_NODES...', type: 'success', delay: 1500 },
+                { msg: 'ENCRYPTING_PAYSLIPS...', type: 'success', delay: 1500 },
                 { msg: 'PAYSLIP_BATCH_EXPORTED: 1,250 records', type: 'success', delay: 3000 }
             ],
             'leave_approve': [
@@ -437,11 +451,11 @@ class CampusNexusApp {
                 { msg: 'FEE_DEMAND_DISPATCHED: 10,245 notices sent', type: 'success', delay: 3500 }
             ],
             'add_program': [
-                { msg: 'INITIALIZING_PROGRAM_NODE...', type: 'success', delay: 0 },
+                { msg: 'INITIALIZING_PROGRAM...', type: 'success', delay: 0 },
                 { msg: 'PROGRAM_SCHEMA_COMMITTED: Pending HOD approval', type: 'success', delay: 1500 }
             ],
             'add_course': [
-                { msg: 'COURSE_NODE_CREATED: Pending faculty assignment', type: 'success', delay: 0 }
+                { msg: 'COURSE_CREATED: Pending faculty assignment', type: 'success', delay: 0 }
             ],
             'publish_course': [
                 { msg: 'VALIDATING_COURSE_METADATA...', type: 'warning', delay: 0 },
@@ -449,12 +463,12 @@ class CampusNexusApp {
             ],
             'convert_applicant': [
                 { msg: 'VERIFYING_APPLICANT_RECORD...', type: 'warning', delay: 0 },
-                { msg: 'CREATING_STUDENT_PROFILE_NODE...', type: 'success', delay: 1500 },
+                { msg: 'CREATING_STUDENT_PROFILE...', type: 'success', delay: 1500 },
                 { msg: 'ENROLMENT_COMPLETE: SIS Record #10246 created', type: 'success', delay: 3000 }
             ],
             'send_notice': [
                 { msg: 'DRAFTING_SHORTAGE_NOTICE...', type: 'warning', delay: 0 },
-                { msg: 'NOTICE_DISPATCHED: Student & Parent node notified', type: 'success', delay: 1500 }
+                { msg: 'NOTICE_DISPATCHED: Student & Parent notified', type: 'success', delay: 1500 }
             ],
             'mark_all_present': [
                 { msg: 'UPDATING_ATTENDANCE_REGISTER...', type: 'success', delay: 0 },
@@ -485,19 +499,19 @@ class CampusNexusApp {
             ],
             'view_ledger': [
                 { msg: 'FETCHING_STUDENT_FISCAL_LEDGER...', type: 'success', delay: 0 },
-                { msg: 'LEDGER_SYNCHRONIZED_WITH_CORE_NODE', type: 'success', delay: 1500 }
+                { msg: 'LEDGER_SYNCHRONIZED', type: 'success', delay: 1500 }
             ],
             'trigger_reminders': [
                 { msg: 'COMPILING_DEFAULTER_LIST...', type: 'warning', delay: 0 },
-                { msg: 'NOTICES_DISPATCHED_VIA_SMS_EMAIL_NODE', type: 'success', delay: 2000 }
+                { msg: 'NOTICES_DISPATCHED_VIA_GATEWAY', type: 'success', delay: 2000 }
             ],
             'halt_admit_cards': [
-                { msg: 'APPLYING_FISCAL_BLOCK_ON_EXAM_NODE...', type: 'warning', delay: 0 },
+                { msg: 'APPLYING_FISCAL_BLOCK_ON_EXAM...', type: 'warning', delay: 0 },
                 { msg: 'ADMIT_CARDS_HALTED_FOR_TARGET_DEBTORS', type: 'success', delay: 1500 }
             ],
             'reconcile_selected': [
                 { msg: 'INITIALIZING_BULK_RECONCILIATION...', type: 'warning', delay: 0 },
-                { msg: 'SYNCING_TRANSACTION_NODES...', type: 'success', delay: 1800 },
+                { msg: 'SYNCING_TRANSACTIONS...', type: 'success', delay: 1800 },
                 { msg: 'BULK_RECONCILIATION_COMPLETE', type: 'success', delay: 3500 }
             ]
         };
@@ -535,7 +549,7 @@ class CampusNexusApp {
             'export_master_ledger': 'Finance_Master_Ledger.xlsx'
         };
         const filename = labels[action] || 'CampusNexus_Export.pdf';
-        const csv = 'ID,Name,Amount,Status\n#001,Sample Record,1000,Active\n#002,Demo Entry,2500,Paid\n#003,Test Node,800,Pending';
+        const csv = 'ID,Name,Amount,Status\n#001,Sample Record,1000,Active\n#002,Demo Entry,2500,Paid\n#003,Test Record,800,Pending';
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -550,7 +564,7 @@ class CampusNexusApp {
         const modal = document.getElementById('modal-container');
         if (!modal) return;
         modal.innerHTML = `
-            <div class="modal-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:10000;display:flex;align-items:flex-start;justify-content:center;padding-top:20px;">
+            <div class="modal-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15, 23, 42, 0.4);backdrop-filter:blur(8px);z-index:10000;display:flex;align-items:flex-start;justify-content:center;padding-top:20px;">
                 <div class="slide-up" style="background:var(--navy-dark);border:1px solid var(--gold);border-radius:6px;width:440px;max-width:98vw;padding:4px 8px;position:relative;box-shadow:0 0 30px rgba(0,0,0,0.8);">
                     <button class="close-hub" style="position:absolute;top:2px;right:4px;background:none;border:none;color:rgba(255,255,255,0.5);font-size:0.7rem;cursor:pointer;z-index:10;">×</button>
 
@@ -558,7 +572,7 @@ class CampusNexusApp {
                     <div style="display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(100,255,218,0.1);padding-bottom:2px;margin-bottom:3px;">
                         <span style="font-family:'Playfair Display';font-weight:900;font-size:0.5rem;color:var(--gold);">CN</span>
                         <h2 style="font-size:0.55rem;font-weight:900;color:var(--white);margin:0;letter-spacing:0.5px;text-transform:uppercase;">Hall Ticket 2026</h2>
-                        <span style="margin-left:auto;font-size:0.38rem;padding:0px 3px;border:1px solid #64ffda;color:#64ffda;border-radius:1px;font-weight:800;">VERIFIED_NODE</span>
+                        <span style="margin-left:auto;font-size:0.38rem;padding:0px 3px;border:1px solid #64ffda;color:#64ffda;border-radius:1px;font-weight:800;">VERIFIED</span>
                     </div>
 
                     <!-- Row 2: Dense Info -->
@@ -744,7 +758,7 @@ class CampusNexusApp {
                             </select>
                         </div>
                         <div class="form-group">
-                            <label style="font-size: 0.6rem; color: var(--slate); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block;">CAMPUS_NODE</label>
+                            <label style="font-size: 0.6rem; color: var(--slate); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block;">CAMPUS</label>
                             <select id="app-campus" class="login-input" style="margin-bottom: 0;">
                                 <option>MAIN_CAMPUS</option>
                                 <option>CITY_CAMPUS</option>
@@ -766,7 +780,7 @@ class CampusNexusApp {
         document.getElementById('submit-applicant').onclick = () => {
             const name = document.getElementById('app-name').value;
             if (!name) {
-                this.showToast('NAME_NODE_MISSING', 'warning');
+                this.showToast('NAME_FIELD_MISSING', 'warning');
                 return;
             }
 
@@ -775,7 +789,7 @@ class CampusNexusApp {
             setTimeout(() => {
                 this.showToast('BIOMETRIC_CHECK_PASSED', 'success');
                 setTimeout(() => {
-                    this.showToast('ADMISSIONS_GATEWAY_SUCCESS: Node Created', 'success');
+                    this.showToast('ADMISSIONS_GATEWAY_SUCCESS: Profile Created', 'success');
                 }, 1500);
             }, 1000);
         };
