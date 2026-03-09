@@ -64,33 +64,83 @@ class CampusNexusApp {
         document.body.innerHTML = `
             <div id="login-screen" class="login-container">
                 <canvas id="bg-canvas"></canvas>
-                <div class="login-card slide-up">
-                    <div class="logo">CAMPUS<span>NEXUS</span></div>
-                    <div class="subtitle">Sovereign ERP Intelligence Hub 1.0</div>
-                    <div style="margin-bottom: 25px; text-align: left;">
-                        <label style="font-size: 0.6rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 8px; display: block;">SELECT_PERSONA</label>
-                        <select id="role-select" class="login-input">
-                            <option value="Management">Management Viewer (Super)</option>
-                            <option value="Admissions">Admissions Officer</option>
-                            <option value="Exams">Exam Cell Controller</option>
-                            <option value="Accounts">Accounts & Fees Admin</option>
-                            <option value="HR">HR Administrator</option>
-                            <option value="Finance">Finance Administrator</option>
-                            <option value="Faculty">Faculty Member</option>
-                            <option value="Student">Student Sovereign</option>
-                            <option value="Parent">Parent / Guardian</option>
-                        </select>
-                        <input type="password" class="login-input" placeholder="ACCESS_KEY" value="********">
+                
+                <div class="login-card slide-up" style="max-width: 440px; width: 90%; padding: 50px; border: 1px solid rgba(124, 58, 237, 0.1); background: rgba(255, 255, 255, 0.95); box-shadow: 0 20px 60px rgba(0,0,0,0.05);">
+                    <div class="logo" style="margin-bottom: 40px; justify-content: center; display: flex; align-items: center; gap: 15px;">
+                        <span style="color: #000; font-family: var(--font-display); font-weight: 900; font-size: 3rem; letter-spacing: -2px;">CAMPUS</span>
+                        <span style="color: #008080; font-family: 'Outfit'; font-weight: 900; font-size: 1.2rem; letter-spacing: 5px; border-left: 2px solid rgba(0,0,0,0.05); padding-left: 20px; margin-left: 5px;">NEXUS</span>
                     </div>
-                    <button id="login-trigger" class="login-btn">LOGIN</button>
-                    <div style="margin-top: 25px; font-size: 0.6rem; color: var(--slate); letter-spacing: 1px;">
-                        SYSTEM_ID: 0x4421-B | STATUS: OPTIMAL
+                    
+                    <div style="margin-bottom: 35px;">
+                        <label style="font-size: 0.65rem; color: var(--vibrant-violet); letter-spacing: 4px; margin-bottom: 18px; display: block; font-weight: 900; text-align: center; opacity: 0.8;">IDENTITY VERIFICATION</label>
+                        
+                        <div class="custom-dropdown" id="role-dropdown">
+                            <div class="dropdown-toggle" id="role-toggle">
+                                <span id="selected-role-label">Management</span>
+                                <i data-lucide="chevron-down" style="width: 16px; height: 16px; color: var(--vibrant-violet);"></i>
+                            </div>
+                            <div class="dropdown-menu" id="role-menu">
+                                <div class="dropdown-item selected" data-value="Management">Central Governance (Super)</div>
+                                <div class="dropdown-item" data-value="Admissions">Admissions Registrar</div>
+                                <div class="dropdown-item" data-value="Exams">Controller of Examinations</div>
+                                <div class="dropdown-item" data-value="Accounts">Fiscal Controller</div>
+                                <div class="dropdown-item" data-value="HR">Human Capital Admin</div>
+                                <div class="dropdown-item" data-value="Finance">Treasury Head</div>
+                                <div class="dropdown-item" data-value="Faculty">Academic Faculty</div>
+                                <div class="dropdown-item" data-value="Student">Student Sovereign</div>
+                                <div class="dropdown-item" data-value="Parent">Legal Guardian</div>
+                            </div>
+                            <input type="hidden" id="role-select" value="Management">
+                        </div>
+
+                        <input type="password" class="login-input" placeholder="Enter Password" value="********" style="background: rgba(0,0,0,0.02); border: 1px solid var(--glass-border); color: #000; padding: 20px; border-radius: 16px; width: 100%; outline:none; text-align: center; font-size: 0.95rem; letter-spacing: 6px; margin-top: 10px;">
+                    </div>
+
+                    <button id="login-trigger" class="login-btn" style="background: var(--vibrant-violet); color: #fff; border-radius: 18px; font-size: 1.1rem; font-weight: 900; height: 65px; width: 100%; box-shadow: 0 15px 35px rgba(0, 128, 128, 0.2); border: none; cursor: pointer; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); letter-spacing: 2px;">LOGIN</button>
+                    
+                    <div style="margin-top: 40px; font-size: 0.6rem; color: #94a3b8; letter-spacing: 3px; font-weight: 800; text-align: center;">
+                        Instance: <span style="color: #64748b;">Cloud Node 1A</span> &nbsp;|&nbsp; Status: <span style="color: #10b981;">Online</span>
                     </div>
                 </div>
             </div>
         `;
         this.initParticles();
+
+        // Custom Dropdown Logic
+        const dropdown = document.getElementById('role-dropdown');
+        const toggle = document.getElementById('role-toggle');
+        const menu = document.getElementById('role-menu');
+        const label = document.getElementById('selected-role-label');
+        const hiddenInput = document.getElementById('role-select');
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.classList.toggle('show');
+            toggle.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const val = item.dataset.value;
+                const text = item.innerText;
+                hiddenInput.value = val;
+                label.innerText = text.split(' (')[0]; // Shorten label if needed
+
+                document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+
+                menu.classList.remove('show');
+                toggle.classList.remove('active');
+            });
+        });
+
+        document.addEventListener('click', () => {
+            menu.classList.remove('show');
+            toggle.classList.remove('active');
+        });
+
         document.getElementById('login-trigger').addEventListener('click', () => this.handleLogin());
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     renderShell() {
@@ -102,21 +152,23 @@ class CampusNexusApp {
                 <div id="sidebar-overlay"></div>
 
                 <aside class="sidebar slide-right">
-                    <div class="logo" style="padding: 10px 0; margin-bottom: 25px;">CAMPUS<span>NEXUS</span></div>
+                    <div class="logo" style="padding: 5px 0; margin-bottom: 15px;">CAMPUS<span style="color: #008080;">NEXUS</span></div>
                     <nav id="nav-container">
                         ${sidebarTemplates[this.userRole] || sidebarTemplates['Management']}
                     </nav>
                     <div style="margin-top: auto; padding-top: 20px;">
                         <button id="logout-trigger" class="nav-item" style="background: rgba(239, 68, 68, 0.08) !important; color: #ef4444 !important; border: 1px solid rgba(239, 68, 68, 0.15) !important; font-size: 0.8rem; justify-content: center; font-weight: 700;">
-                            <i data-lucide="log-out" style="width:16px; height:16px;"></i> LOGOUT
+                            <i data-lucide="log-out" style="width:16px; height:16px;"></i> Logout
                         </button>
                     </div>
                 </aside>
 
                 <main class="main-content">
                     <header class="header slide-down">
-                        <!-- Hamburger (mobile only) -->
-                        <button id="menu-toggle" aria-label="Open menu">☰</button>
+                        <!-- Sidebar Toggle (All Devices) -->
+                        <button id="menu-toggle" aria-label="Toggle Sidebar">
+                            <i data-lucide="menu" style="width: 20px; height: 20px;"></i>
+                        </button>
 
                         <div class="search-bar">
                             <i data-lucide="search" style="color: var(--gold);"></i>
@@ -124,11 +176,18 @@ class CampusNexusApp {
                         </div>
 
                         <div class="header-actions">
-                            <select id="college-select" class="login-input" style="margin:0; width:auto; padding:8px 15px; font-size:0.7rem;">
-                                <option ${this.activeCollege === 'MAIN_CAMPUS' ? 'selected' : ''}>MAIN_CAMPUS</option>
-                                <option ${this.activeCollege === 'CITY_CAMPUS' ? 'selected' : ''}>CITY_CAMPUS</option>
-                                <option ${this.activeCollege === 'NORTH_CAMPUS' ? 'selected' : ''}>NORTH_CAMPUS</option>
-                            </select>
+                            <div class="custom-dropdown" id="college-dropdown" style="margin:0; width:180px;">
+                                <div class="dropdown-toggle" id="college-toggle" style="padding: 8px 15px; border-radius: 10px; font-size: 0.75rem;">
+                                    <span id="selected-college-label">${this.activeCollege}</span>
+                                    <i data-lucide="chevron-down" style="width: 14px; height: 14px; color: var(--vibrant-violet);"></i>
+                                </div>
+                                <div class="dropdown-menu" id="college-menu" style="border-radius: 10px;">
+                                    <div class="dropdown-item ${this.activeCollege === 'MAIN_CAMPUS' ? 'selected' : ''}" data-value="MAIN_CAMPUS">Main Campus</div>
+                                    <div class="dropdown-item ${this.activeCollege === 'CITY_CAMPUS' ? 'selected' : ''}" data-value="CITY_CAMPUS">City Campus</div>
+                                    <div class="dropdown-item ${this.activeCollege === 'NORTH_CAMPUS' ? 'selected' : ''}" data-value="NORTH_CAMPUS">North Campus</div>
+                                </div>
+                                <input type="hidden" id="college-select" value="${this.activeCollege}">
+                            </div>
                             <div class="profile-chip">
                                 <span style="font-size: 0.6rem; color: var(--gold); letter-spacing: 1px; font-weight: 700;">${this.userRole.toUpperCase()}</span>
                                 <div style="width: 32px; height: 32px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink:0;"><i data-lucide="user" style="width: 18px; height: 18px; color:white;"></i></div>
@@ -168,6 +227,48 @@ class CampusNexusApp {
         this.renderView('Dashboard');
         this.attachShellListeners();
         this.attachMobileListeners();
+        this.attachCustomDropdowns();
+    }
+
+    attachCustomDropdowns() {
+        // College Dropdown
+        const collegeDropdown = document.getElementById('college-dropdown');
+        if (collegeDropdown) {
+            const toggle = document.getElementById('college-toggle');
+            const menu = document.getElementById('college-menu');
+            const label = document.getElementById('selected-college-label');
+            const hiddenInput = document.getElementById('college-select');
+
+            toggle.onclick = (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.dropdown-menu').forEach(m => {
+                    if (m !== menu) m.classList.remove('show');
+                });
+                menu.classList.toggle('show');
+                toggle.classList.toggle('active');
+            };
+
+            collegeDropdown.querySelectorAll('.dropdown-item').forEach(item => {
+                item.onclick = () => {
+                    const val = item.dataset.value;
+                    this.activeCollege = val;
+                    label.innerText = val;
+                    hiddenInput.value = val;
+
+                    collegeDropdown.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+                    item.classList.add('selected');
+
+                    menu.classList.remove('show');
+                    toggle.classList.remove('active');
+                    this.showToast(`CAMPUS_SWITCH: Active Node -> ${val}`);
+                };
+            });
+        }
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+            document.querySelectorAll('.dropdown-toggle').forEach(t => t.classList.remove('active'));
+        });
     }
 
     renderView(viewName) {
@@ -175,8 +276,8 @@ class CampusNexusApp {
         const container = document.getElementById('view-container');
         if (!container) return;
 
-        // Sync with renamed Analytics -> Reports
-        const finalViewName = viewName === 'Analytics' ? 'Reports' : viewName;
+        // Sync with renamed Analytics -> Reports and the sidebar's ReportsHub
+        const finalViewName = (viewName === 'Analytics' || viewName === 'ReportsHub') ? 'Reports' : viewName;
 
         let templates;
         if (this.userRole === 'Student') {
@@ -296,22 +397,22 @@ class CampusNexusApp {
         const toast = document.createElement('div');
         toast.className = `toast slide-up ${type}`;
         toast.style.cssText = `
-            background: var(--navy-dark);
+            background: #ffffff;
             border: 1px solid var(--glass-border);
             border-left: 4px solid ${type === 'success' ? '#10b981' : 'var(--gold)'};
-            color: var(--white);
+            color: #1e293b;
             padding: 15px 25px;
             border-radius: 12px;
             margin-top: 10px;
             font-size: 0.8rem;
             font-weight: 600;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
             display: flex;
             align-items: center;
             gap: 12px;
             z-index: 10001;
         `;
-        toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" style="width:18px; height:18px;"></i> ${message}`;
+        toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" style="width:18px; height:18px; color:${type === 'success' ? '#10b981' : 'var(--gold)'};"></i> ${message}`;
         container.appendChild(toast);
         lucide.createIcons();
         setTimeout(() => toast.remove(), 4000);
@@ -320,18 +421,27 @@ class CampusNexusApp {
     // --- Handlers ---
     handleLogin() {
         const role = document.getElementById('role-select').value;
-        this.isLoggedIn = true;
-        this.userRole = role;
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userRole', role);
-        this.showToast(`LOGIN_SUCCESSFUL: ${role}_CALIBRATED`);
-        this.render();
+        const btn = document.getElementById('login-trigger');
+
+        // Visual feedback on button
+        btn.innerHTML = 'VALIDATING...';
+        btn.style.opacity = '0.7';
+        btn.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+            this.isLoggedIn = true;
+            this.userRole = role;
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userRole', role);
+            this.render();
+            this.showToast(`Welcome back, ${role}`);
+        }, 1200);
     }
 
     handleLogout() {
         this.isLoggedIn = false;
         localStorage.removeItem('isLoggedIn');
-        this.showToast('SESSION_LOGOUT', 'warning');
+        this.showToast('Logged out successfully', 'warning');
         this.render();
     }
 
@@ -362,157 +472,157 @@ class CampusNexusApp {
 
         const sequences = {
             'download_id': [
-                { msg: 'INITIALIZING_SECURE_EXTRACT...', type: 'success', delay: 0 },
-                { msg: 'ENCRYPTING_ID_0xCC...', type: 'success', delay: 1500 },
-                { msg: 'DOCUMENT_DISPATCHED', type: 'success', delay: 3000 }
+                { msg: 'Preparing ID card...', type: 'success', delay: 0 },
+                { msg: 'Encrypting files...', type: 'success', delay: 1500 },
+                { msg: 'ID card downloaded successfully', type: 'success', delay: 3000 }
             ],
             'bonafide': [
-                { msg: 'VERIFYING_ACADEMIC_REGISTRY...', type: 'success', delay: 0 },
-                { msg: 'GENERATING_INSTITUTIONAL_SEAL...', type: 'success', delay: 1200 },
-                { msg: 'BONAFIDE_CERTIFICATE_READY_FOR_DISPATCH', type: 'success', delay: 2500 }
+                { msg: 'Verifying academic records...', type: 'success', delay: 0 },
+                { msg: 'Generating certificate seal...', type: 'success', delay: 1200 },
+                { msg: 'Bonafide certificate ready for download', type: 'success', delay: 2500 }
             ],
             'parent_connect': [
-                { msg: 'ESTABLISHING_MOBILE_GATEWAY...', type: 'success', delay: 0 },
-                { msg: 'SECURE_CHANNEL_READY: Message sent to Mentor', type: 'success', delay: 1000 }
+                { msg: 'Connecting to mobile gateway...', type: 'success', delay: 0 },
+                { msg: 'Message sent to student mentor', type: 'success', delay: 1000 }
             ],
             'pay_fees': [
-                { msg: 'REDIRECTING_TO_SECURE_GATEWAY...', type: 'warning', delay: 0 },
-                { msg: 'AUTHORIZING_NET_BANKING...', type: 'success', delay: 1500 },
-                { msg: 'PAYMENT_SUCCESS: Transaction #PX-0444 committed', type: 'success', delay: 3000 }
+                { msg: 'Redirecting to payment gateway...', type: 'warning', delay: 0 },
+                { msg: 'Authorizing transaction...', type: 'success', delay: 1500 },
+                { msg: 'Payment successful: Transaction confirmed', type: 'success', delay: 3000 }
             ],
             'rsvp': [
-                { msg: 'PROCESSING_NEXUS_RSVP...', type: 'success', delay: 0 },
-                { msg: 'SLOT_SECURED: Admission code sent to ward mobile', type: 'success', delay: 1200 }
+                { msg: 'Processing admission RSVP...', type: 'success', delay: 0 },
+                { msg: 'Seat secured: Confirmation sent to mobile', type: 'success', delay: 1200 }
             ],
             'reset_key': [
-                { msg: 'SECURITY_PROTOCOL_OVERRIDE_INIT...', type: 'warning', delay: 0 },
-                { msg: 'REGENERATING_NEURAL_ACCESS_KEY...', type: 'warning', delay: 1500 },
-                { msg: 'ACCESS_KEY_REFRESHED_SUCCESSFULLY', type: 'success', delay: 3000 }
+                { msg: 'Initialising security reset...', type: 'warning', delay: 0 },
+                { msg: 'Regenerating access key...', type: 'warning', delay: 1500 },
+                { msg: 'Password reset successful', type: 'success', delay: 3000 }
             ],
             'fee_demand': [
-                { msg: 'COMPILING_PENDING_FEE_REGISTRY...', type: 'success', delay: 0 },
-                { msg: 'DISPATCHING_GLOBAL_DEMANDS_TO_DEBTORS', type: 'success', delay: 2000 }
+                { msg: 'Compiling fee registry...', type: 'success', delay: 0 },
+                { msg: 'Fee demands sent to registered students', type: 'success', delay: 2000 }
             ],
             'payroll': [
-                { msg: 'AUTHORIZING_INSTITUTIONAL_CORE...', type: 'warning', delay: 0 },
-                { msg: 'EXECUTING_BATCH_CREDIT_SEQUENCE...', type: 'success', delay: 1800 },
-                { msg: 'PAYROLL_DISPATCH_COMPLETE', type: 'success', delay: 3500 }
+                { msg: 'Authorizing payroll process...', type: 'warning', delay: 0 },
+                { msg: 'Processing batch payments...', type: 'success', delay: 1800 },
+                { msg: 'Payroll process complete', type: 'success', delay: 3500 }
             ],
             'rotate_pass': [
-                { msg: 'SECURITY_OVERRIDE_INITIATED...', type: 'warning', delay: 0 },
-                { msg: 'GENERATING_NEW_CIPHER_KEY...', type: 'warning', delay: 1200 },
-                { msg: 'PASS_ROTATION_COMPLETE: Notify sent to registered mobile', type: 'success', delay: 2800 }
+                { msg: 'Security rotation initiated...', type: 'warning', delay: 0 },
+                { msg: 'Generating new passkeys...', type: 'warning', delay: 1200 },
+                { msg: 'Passwords updated; notifications sent', type: 'success', delay: 2800 }
             ],
             'logout': [
-                { msg: 'BROADCASTING_LOGOUT_SIGNAL...', type: 'warning', delay: 0 },
-                { msg: 'LOGOUT_SUCCESSFUL', type: 'success', delay: 1500 }
+                { msg: 'Logging out of session...', type: 'warning', delay: 0 },
+                { msg: 'Logged out successfully', type: 'success', delay: 1500 }
             ],
             'commit_branding': [
-                { msg: 'VALIDATING_INSTITUTIONAL_ASSETS...', type: 'success', delay: 0 },
-                { msg: 'SYNCING_BRAND_ASSETS_TO_CORE...', type: 'success', delay: 1500 },
-                { msg: 'BRANDING_COMMIT_SUCCESSFUL', type: 'success', delay: 3000 }
+                { msg: 'Validating branding assets...', type: 'success', delay: 0 },
+                { msg: 'Syncing assets to core...', type: 'success', delay: 1500 },
+                { msg: 'Branding updated successfully', type: 'success', delay: 3000 }
             ],
             'toggle_setting': [
-                { msg: 'TOGGLING_SYSTEM_PARAMETER...', type: 'warning', delay: 0 },
-                { msg: 'GLOBAL_PARAMETER_STATE_UPDATED', type: 'success', delay: 1200 }
+                { msg: 'Updating system preference...', type: 'warning', delay: 0 },
+                { msg: 'Preference saved successfully', type: 'success', delay: 1200 }
             ],
             'schedule_maint': [
-                { msg: 'QUERYING_MAINTENANCE_SCHEDULER...', type: 'success', delay: 0 },
-                { msg: 'NEW_WINDOW_COMMITTED_TO_CLUSTER', type: 'success', delay: 1800 }
+                { msg: 'Checking maintenance schedule...', type: 'success', delay: 0 },
+                { msg: 'Maintenance window scheduled', type: 'success', delay: 1800 }
             ],
             'save_prefs': [
-                { msg: 'BINDING_PREFERENCE_SNAPSHOT...', type: 'success', delay: 0 },
-                { msg: 'WORKSPACE_CONFIGURATION_SYNCED', type: 'success', delay: 1500 }
+                { msg: 'Saving layout preferences...', type: 'success', delay: 0 },
+                { msg: 'Workspace settings synced', type: 'success', delay: 1500 }
             ],
             'upload_logo': [
-                { msg: 'AWAITING_ASSET_UPLOAD...', type: 'warning', delay: 0 },
-                { msg: 'EMBLEM_SUBMITTED_FOR_APPROVAL', type: 'success', delay: 1000 }
+                { msg: 'Uploading school emblem...', type: 'warning', delay: 0 },
+                { msg: 'Emblem submitted for approval', type: 'success', delay: 1000 }
             ],
             'publish_results': [
-                { msg: 'VALIDATING_MARKS_REGISTRY...', type: 'warning', delay: 0 },
-                { msg: 'GENERATING_GRADE_COMPUTATION_MATRIX...', type: 'success', delay: 1500 },
-                { msg: 'RESULT_PUBLISHED: Students notified via portal', type: 'success', delay: 3000 }
+                { msg: 'Validating marks registry...', type: 'warning', delay: 0 },
+                { msg: 'Generating grade sheets...', type: 'success', delay: 1500 },
+                { msg: 'Exam results published; students notified', type: 'success', delay: 3000 }
             ],
             'gen_payslip': [
-                { msg: 'COMPILING_PAYROLL_REGISTER...', type: 'warning', delay: 0 },
-                { msg: 'ENCRYPTING_PAYSLIPS...', type: 'success', delay: 1500 },
-                { msg: 'PAYSLIP_BATCH_EXPORTED: 1,250 records', type: 'success', delay: 3000 }
+                { msg: 'Compiling payroll data...', type: 'warning', delay: 0 },
+                { msg: 'Encrypting payslips...', type: 'success', delay: 1500 },
+                { msg: 'Payslips exported; 1,250 records ready', type: 'success', delay: 3000 }
             ],
             'leave_approve': [
-                { msg: 'FETCHING_LEAVE_BALANCE...', type: 'warning', delay: 0 },
-                { msg: 'LEAVE_SANCTIONED: Balance updated', type: 'success', delay: 1500 }
+                { msg: 'Checking leave balance...', type: 'warning', delay: 0 },
+                { msg: 'Leave approved; balance updated', type: 'success', delay: 1500 }
             ],
             'leave_reject': [
-                { msg: 'LEAVE_REQUEST_DECLINED: Notify sent', type: 'warning', delay: 0 }
+                { msg: 'Leave request declined; notification sent', type: 'warning', delay: 0 }
             ],
             'fee_demand_gen': [
-                { msg: 'SCANNING_ELIGIBLE_ACCOUNTS...', type: 'warning', delay: 0 },
-                { msg: 'GENERATING_DEMAND_NOTICES...', type: 'success', delay: 1800 },
-                { msg: 'FEE_DEMAND_DISPATCHED: 10,245 notices sent', type: 'success', delay: 3500 }
+                { msg: 'Scanning student accounts...', type: 'warning', delay: 0 },
+                { msg: 'Generating demand notices...', type: 'success', delay: 1800 },
+                { msg: 'Fee notices sent to 10,245 students', type: 'success', delay: 3500 }
             ],
             'add_program': [
-                { msg: 'INITIALIZING_PROGRAM...', type: 'success', delay: 0 },
-                { msg: 'PROGRAM_SCHEMA_COMMITTED: Pending HOD approval', type: 'success', delay: 1500 }
+                { msg: 'Initialising new program...', type: 'success', delay: 0 },
+                { msg: 'Program created; pending HOD approval', type: 'success', delay: 1500 }
             ],
             'add_course': [
-                { msg: 'COURSE_CREATED: Pending faculty assignment', type: 'success', delay: 0 }
+                { msg: 'Course created; pending faculty assignment', type: 'success', delay: 0 }
             ],
             'publish_course': [
-                { msg: 'VALIDATING_COURSE_METADATA...', type: 'warning', delay: 0 },
-                { msg: 'COURSE_PUBLISHED: Visible in timetable', type: 'success', delay: 1500 }
+                { msg: 'Validating course details...', type: 'warning', delay: 0 },
+                { msg: 'Course published; now visible in timetable', type: 'success', delay: 1500 }
             ],
             'convert_applicant': [
-                { msg: 'VERIFYING_APPLICANT_RECORD...', type: 'warning', delay: 0 },
-                { msg: 'CREATING_STUDENT_PROFILE...', type: 'success', delay: 1500 },
-                { msg: 'ENROLMENT_COMPLETE: SIS Record #10246 created', type: 'success', delay: 3000 }
+                { msg: 'Verifying applicant profile...', type: 'warning', delay: 0 },
+                { msg: 'Creating student record...', type: 'success', delay: 1500 },
+                { msg: 'Enrollment complete: Student ID #10246 created', type: 'success', delay: 3000 }
             ],
             'send_notice': [
-                { msg: 'DRAFTING_SHORTAGE_NOTICE...', type: 'warning', delay: 0 },
-                { msg: 'NOTICE_DISPATCHED: Student & Parent notified', type: 'success', delay: 1500 }
+                { msg: 'Drafting attendance notice...', type: 'warning', delay: 0 },
+                { msg: 'Notice sent to student and parent', type: 'success', delay: 1500 }
             ],
             'mark_all_present': [
-                { msg: 'UPDATING_ATTENDANCE_REGISTER...', type: 'success', delay: 0 },
-                { msg: 'ATTENDANCE_MARKED: All present — registry sealed', type: 'success', delay: 1200 }
+                { msg: 'Updating attendance register...', type: 'success', delay: 0 },
+                { msg: 'Attendance marked: All students present', type: 'success', delay: 1200 }
             ],
             'init_audit': [
-                { msg: 'SUBMITTING_AUDIT_REQUEST_TO_CONTROLLER...', type: 'warning', delay: 0 },
-                { msg: 'INTERNAL_AUDIT_SCHEDULED: Confirmation sent', type: 'success', delay: 2000 }
+                { msg: 'Submitting audit request...', type: 'warning', delay: 0 },
+                { msg: 'Internal audit scheduled successfully', type: 'success', delay: 2000 }
             ],
             'payroll_run': [
-                { msg: 'VALIDATING_PAYROLL_ENTRIES...', type: 'warning', delay: 0 },
-                { msg: 'PAYROLL_CYCLE_INITIATED: Batch processing...', type: 'success', delay: 1800 },
-                { msg: 'PAYROLL_RUN_COMPLETE: FEB 2026 closed', type: 'success', delay: 3500 }
+                { msg: 'Validating payroll entries...', type: 'warning', delay: 0 },
+                { msg: 'Payroll cycle started; processing...', type: 'success', delay: 1800 },
+                { msg: 'Payroll run complete: February 2026 closed', type: 'success', delay: 3500 }
             ],
             'doc_verify': [
-                { msg: 'FETCHING_DOCUMENT_BUNDLE...', type: 'warning', delay: 0 },
-                { msg: 'OCR_SCAN_PROCESSING: 3 documents detected', type: 'success', delay: 1200 },
-                { msg: 'VERIFICATION_COMPLETE: Applicant status → VERIFIED', type: 'success', delay: 2600 }
+                { msg: 'Processing documents...', type: 'warning', delay: 0 },
+                { msg: 'Scanning files for verification...', type: 'success', delay: 1200 },
+                { msg: 'Verification complete: Status updated to Verified', type: 'success', delay: 2600 }
             ],
             'seat_offer': [
-                { msg: 'CHECKING_SEAT_AVAILABILITY...', type: 'warning', delay: 0 },
-                { msg: 'SEAT_ALLOCATED: Offer letter dispatched to applicant', type: 'success', delay: 1800 }
+                { msg: 'Checking seat availability...', type: 'warning', delay: 0 },
+                { msg: 'Seat allocated; offer letter sent', type: 'success', delay: 1800 }
             ],
             'run_audit': [
-                { msg: 'GENERATING_COMPLIANCE_AUDIT_REPORT...', type: 'warning', delay: 0 },
-                { msg: 'SCANNING_REGULATORY_REGISTRY...', type: 'success', delay: 1500 },
-                { msg: 'COMPLIANCE_AUDIT_COMPLETE: Report ready', type: 'success', delay: 3000 }
+                { msg: 'Generating compliance audit...', type: 'warning', delay: 0 },
+                { msg: 'Scanning regulatory records...', type: 'success', delay: 1500 },
+                { msg: 'Compliance audit complete; report ready', type: 'success', delay: 3000 }
             ],
             'view_ledger': [
-                { msg: 'FETCHING_STUDENT_FISCAL_LEDGER...', type: 'success', delay: 0 },
-                { msg: 'LEDGER_SYNCHRONIZED', type: 'success', delay: 1500 }
+                { msg: 'Fetching student financial ledger...', type: 'success', delay: 0 },
+                { msg: 'Ledger synchronized successfully', type: 'success', delay: 1500 }
             ],
             'trigger_reminders': [
-                { msg: 'COMPILING_DEFAULTER_LIST...', type: 'warning', delay: 0 },
-                { msg: 'NOTICES_DISPATCHED_VIA_GATEWAY', type: 'success', delay: 2000 }
+                { msg: 'Compiling defaulter list...', type: 'warning', delay: 0 },
+                { msg: 'Payment reminders sent to students', type: 'success', delay: 2000 }
             ],
             'halt_admit_cards': [
-                { msg: 'APPLYING_FISCAL_BLOCK_ON_EXAM...', type: 'warning', delay: 0 },
-                { msg: 'ADMIT_CARDS_HALTED_FOR_TARGET_DEBTORS', type: 'success', delay: 1500 }
+                { msg: 'Suspending admit card downloads...', type: 'warning', delay: 0 },
+                { msg: 'Downloads halted for target records', type: 'success', delay: 1500 }
             ],
             'reconcile_selected': [
-                { msg: 'INITIALIZING_BULK_RECONCILIATION...', type: 'warning', delay: 0 },
-                { msg: 'SYNCING_TRANSACTIONS...', type: 'success', delay: 1800 },
-                { msg: 'BULK_RECONCILIATION_COMPLETE', type: 'success', delay: 3500 }
+                { msg: 'Starting bulk reconciliation...', type: 'warning', delay: 0 },
+                { msg: 'Synchronizing transactions...', type: 'success', delay: 1800 },
+                { msg: 'Bulk reconciliation complete', type: 'success', delay: 3500 }
             ]
         };
 
@@ -671,7 +781,11 @@ class CampusNexusApp {
         toggle.parentNode.replaceChild(newToggle, toggle);
 
         newToggle.addEventListener('click', () => {
-            sidebar.classList.contains('sidebar-open') ? closeSidebar() : openSidebar();
+            if (window.innerWidth > 768) {
+                document.querySelector('.app-shell').classList.toggle('sidebar-hidden');
+            } else {
+                sidebar.classList.contains('sidebar-open') ? closeSidebar() : openSidebar();
+            }
         });
 
         const newOverlay = overlay.cloneNode(true);

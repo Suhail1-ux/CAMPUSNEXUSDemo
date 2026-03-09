@@ -137,6 +137,9 @@
         font-size: 0.7rem !important;
         padding: 5px 10px !important;
         max-width: 120px;
+        background: var(--glass-white) !important;
+        border: 1px solid var(--glass-border) !important;
+        color: var(--white) !important;
     }
 
     /* Profile Chip */
@@ -156,6 +159,7 @@
         padding-bottom: 90px;
         flex: 1;
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
     /* --- Page Title --- */
@@ -248,10 +252,11 @@
         display: flex;
         align-items: center;
         justify-content: space-around;
-        background: var(--glass);
-        backdrop-filter: blur(15px);
+        background: rgba(5, 5, 5, 0.85);
+        backdrop-filter: blur(var(--glass-blur));
         border-top: 1px solid var(--glass-border);
-        padding: 8px 0;
+        padding: 10px 0;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
     }
 
     .bottom-nav-grid {
@@ -318,6 +323,7 @@
     [style*="grid-template-columns: 280px 1fr"],
     [style*="grid-template-columns: 260px 1fr"],
     [style*="grid-template-columns: 240px 1fr"],
+    .settings-layout,
     .kpi-grid {
         grid-template-columns: 1fr !important;
         display: flex !important;

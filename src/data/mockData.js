@@ -1,33 +1,33 @@
 export const mockData = {
     "Admin": {
-        title: "Executive Dashboard",
-        breadcrumb: "GLOBAL GOVERNANCE / ANALYTICS HUB",
+        title: "Management Dashboard",
+        breadcrumb: "Dashboard / Analytics",
         kpis: [
-            { val: "10,245", label: "Active Census", color: "var(--white)" },
-            { val: "3,200", label: "Leads Injected", color: "var(--gold)" },
-            { val: "$4.1M", label: "Revenue Sync", color: "var(--gold)" },
-            { val: "92.4%", label: "System Integrity", color: "#10b981" },
-            { val: "1,450", label: "Faculty Members", color: "var(--white)" },
-            { val: "99.9%", label: "System Uptime", color: "#10b981" }
+            { val: "10,245", label: "Students", color: "var(--white)" },
+            { val: "3,200", label: "Leads Received", color: "var(--vibrant-violet)" },
+            { val: "$4.1M", label: "Current Revenue", color: "var(--vibrant-violet)" },
+            { val: "92.4%", label: "Enrollment Rate", color: "#10b981" },
+            { val: "1,450", label: "Faculty", color: "var(--white)" },
+            { val: "99.9%", label: "Uptime", color: "#10b981" }
         ]
     },
     "Faculty": {
-        title: "Faculty Control Center",
-        breadcrumb: "INSTRUCTIONAL_LOGIC / FACULTY_PROFILE",
+        title: "Faculty Dashboard",
+        breadcrumb: "Faculty / Profile",
         kpis: [
-            { val: "04", label: "Active Classes", color: "var(--gold)" },
+            { val: "04", label: "Today's Classes", color: "var(--vibrant-violet)" },
             { val: "185", label: "Total Students", color: "var(--white)" },
-            { val: "96%", label: "Avg Attendance", color: "#10b981" },
-            { val: "12", label: "Pending Marks", color: "var(--white)" }
+            { val: "96%", label: "Attendance", color: "#10b981" },
+            { val: "12", label: "Grade Entries", color: "var(--white)" }
         ]
     },
     "Student": {
-        title: "Student Profile",
-        breadcrumb: "SCHOLAR_CORE / PERSONAL_INFRA",
+        title: "Student Dashboard",
+        breadcrumb: "Student / My Profile",
         kpis: [
-            { val: "94%", label: "My Presence", color: "#10b981" },
-            { val: "$1,250", label: "Fees Pending", color: "#ef4444" },
-            { val: "9.42", label: "Current GPA", color: "var(--gold)" },
+            { val: "94%", label: "My Attendance", color: "#10b981" },
+            { val: "$1,250", label: "Fees Due", color: "#ef4444" },
+            { val: "9.42", label: "GPA", color: "var(--vibrant-violet)" },
             { val: "02", label: "Active Exams", color: "var(--white)" }
         ]
     }
@@ -53,7 +53,7 @@ export const globalStats = {
     Revenue: '$4.2M'
 };
 
-export const campusNames = ['MAIN_CAMPUS', 'CITY_CAMPUS', 'NORTH_CAMPUS'];
+export const campusNames = ['Main Campus', 'City Campus', 'North Campus'];
 
 export const sidebarTemplates = {
     "Management": `
@@ -94,23 +94,23 @@ export const sidebarTemplates = {
         <button class="nav-item" data-view="Reports"><i data-lucide="file-text"></i> <span class="nav-label">HR Reports</span></button>
     `,
     "Finance": `
-        <button class="nav-item active" data-view="Dashboard"><i data-lucide="layout-dashboard"></i> <span class="nav-label">Fiscal Pulse</span></button>
-        <button class="nav-item" data-view="Ledger"><i data-lucide="landmark"></i> <span class="nav-label">Sovereign Ledger</span></button>
-        <button class="nav-item" data-view="Assets"><i data-lucide="gem"></i> <span class="nav-label">Asset Matrix</span></button>
+        <button class="nav-item active" data-view="Dashboard"><i data-lucide="layout-dashboard"></i> <span class="nav-label">Finance Pulse</span></button>
+        <button class="nav-item" data-view="Ledger"><i data-lucide="landmark"></i> <span class="nav-label">Master Ledger</span></button>
+        <button class="nav-item" data-view="Assets"><i data-lucide="gem"></i> <span class="nav-label">Asset Management</span></button>
         <button class="nav-item" data-view="Reports"><i data-lucide="file-text"></i> <span class="nav-label">Finance Analytics</span></button>
     `,
     "Faculty": `
-        <button class="nav-item active" data-view="Dashboard"><i data-lucide="layout-dashboard"></i> <span class="nav-label">Instructional Hub</span></button>
+        <button class="nav-item active" data-view="Dashboard"><i data-lucide="layout-dashboard"></i> <span class="nav-label">Faculty Dashboard</span></button>
         <button class="nav-item" data-view="Academics"><i data-lucide="book"></i> <span class="nav-label">My Classes</span></button>
         <button class="nav-item" data-view="Attendance"><i data-lucide="check-circle"></i> <span class="nav-label">Mark Attendance</span></button>
         <button class="nav-item" data-view="Reports"><i data-lucide="trending-down"></i> <span class="nav-label">Academic Pulse</span></button>
     `,
     "Student": `
-        <button class="nav-item active" data-view="Dashboard"><i data-lucide="shield"></i> <span class="nav-label">Sovereign Pulse</span></button>
+        <button class="nav-item active" data-view="Dashboard"><i data-lucide="shield"></i> <span class="nav-label">My Progress</span></button>
         <button class="nav-item" data-view="Timetable"><i data-lucide="calendar"></i> <span class="nav-label">Schedule</span></button>
-        <button class="nav-item" data-view="Attendance"><i data-lucide="layout-dashboard"></i> <span class="nav-label">Presence Ledger</span></button>
-        <button class="nav-item" data-view="Exams"><i data-lucide="book"></i> <span class="nav-label">Evaluation Hub</span></button>
-        <button class="nav-item" data-view="Fees"><i data-lucide="credit-card"></i> <span class="nav-label">Fiscal Portal</span></button>
+        <button class="nav-item" data-view="Attendance"><i data-lucide="layout-dashboard"></i> <span class="nav-label">Attendance Record</span></button>
+        <button class="nav-item" data-view="Exams"><i data-lucide="book"></i> <span class="nav-label">Exam Results</span></button>
+        <button class="nav-item" data-view="Fees"><i data-lucide="credit-card"></i> <span class="nav-label">Fee Portal</span></button>
         <button class="nav-item" data-view="ReportsHub"><i data-lucide="megaphone"></i> <span class="nav-label">Notices</span></button>
     `,
     "Parent": `
